@@ -62,7 +62,38 @@ Check these cross-cutters every time; fold them into the rounds or the PRD, skip
 
 ### 4. Play back the brief
 
-Summarise in under 10 lines: problem, users, v1 scope, out of scope, key decisions. Ask the user to confirm or correct. Don't continue until confirmed; if corrected, update and play back again.
+Show the brief as a **formatted chat message**, never inside the question text (question dialogs render plain text, so a brief there becomes one unreadable block). Post it with `SendUserMessage` when that tool is available; otherwise put it in your reply right before the question.
+
+Use exactly this layout. Short fragments, not sentences; one idea per bullet; max ~15 lines:
+
+```markdown
+### Brief · <Vertical> - <Area>: <action>
+
+**Problem** · <one line: what's missing today and for whom>
+
+**In v1**
+- <scope item>
+- <scope item>
+
+**Out of v1** · <item> · <item> · <item>
+
+**Flow** · <step> → <step> → <step>
+
+**Decisions**
+- <decision> *(you)*
+- <decision> *(context: <source>)*
+
+**Assumed — check these**
+- <assumption>
+
+**Still open** · <question> · <question>
+```
+
+- Mark where each decision came from: *(you)* for the user's answers, *(context)* for `peasy-context.md` or an attachment.
+- Everything you guessed goes under **Assumed — check these**, never mixed into decisions.
+- Omit a section only when it's empty.
+
+Then ask one short question, e.g. with `AskUserQuestion`: "Is the brief right?" Options: "Yes, continue (Recommended)", "Change scope", "Change something else". Don't repeat the brief in the question. Don't continue until confirmed; if corrected, update and post the brief again.
 
 ### 5. Ask about design
 

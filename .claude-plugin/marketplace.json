@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Peasy skills for Claude: brainstorm a feature into a Jira-style PRD and design it on-brand.",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "plugins": [
     {
       "name": "peasy-brainstormer",
       "source": "./plugins/peasy-brainstormer",
       "description": "Rough Peasy feature idea -> Belgian-context clarifying questions -> optional mockup -> Jira-style PRD (epic + stories, Given/When/Then AC) as one HTML page.",
-      "version": "0.5.0"
+      "version": "0.5.1"
     },
     {
       "name": "peasy-design",
