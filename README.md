@@ -17,15 +17,31 @@ Pick the option that matches how you use Claude.
 
 ### Option A: Claude app (desktop or claude.ai), recommended for PMs and designers
 
+There are two ways to install in the app. Adding the marketplace link is quickest and keeps you on the latest version.
+
+**A1. Add from the marketplace link**
+
+1. In Claude, open **Customize → Plugins**. On the right side, choose **Add marketplace**.
+2. Paste this link and confirm:
+   ```text
+   https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace
+   ```
+   (The short form `KeyValueSoftwareSystems/peasy-claude-marketplace` also works.)
+3. Install **peasy-brainstormer** and **peasy-design** from the marketplace.
+4. Optional: turn on **Sync automatically** so new releases arrive on their own.
+
+**A2. Upload the plugin files**
+
 1. Download both files from the [latest release](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest):
    - [`peasy-brainstormer.plugin`](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest/download/peasy-brainstormer.plugin)
    - [`peasy-design.plugin`](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest/download/peasy-design.plugin)
 2. In Claude, open **Customize → Plugins → Add plugin → Upload** and upload the first file. Repeat for the second.
-3. Check that both show as enabled in **Customize → Plugins**.
+
+Either way, check that both show as enabled in **Customize → Plugins**.
 
 > Requires a paid Claude plan (Pro, Max, Team or Enterprise). If you don't see Plugins, ask your Claude admin to allow plugins and skills.
 
-**Admins (Team/Enterprise):** after installing, use **Publish to organization** on each plugin so everyone at Peasy gets it without uploading. Or add this repo as a GitHub plugin marketplace in your organization settings so updates arrive automatically.
+**Admins (Team/Enterprise):** after installing, use **Publish to organization** on each plugin so everyone at Peasy gets it without installing it themselves. (Organization **Sync from GitHub** only accepts private or internal repos, so it can't be used with this public repo.)
 
 ### Option B: Claude Code (terminal)
 
@@ -75,7 +91,8 @@ How the skill flows: [`docs/flows/`](docs/flows/) (demo, user and call flow, plu
 
 ## 3. Update
 
-- **Claude app:** download the new `.plugin` files from the [latest release](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest) and upload them again. They replace the old version.
+- **Claude app, added from the marketplace link:** updates arrive automatically if **Sync automatically** is on. Otherwise use **Check for updates** in **Customize → Plugins**.
+- **Claude app, uploaded files:** download the new `.plugin` files from the [latest release](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest) and upload them again. They replace the old version.
 - **Claude Code:** `/plugin marketplace update peasy-claude-marketplace`
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed.
