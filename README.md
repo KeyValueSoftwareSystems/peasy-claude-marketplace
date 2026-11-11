@@ -1,151 +1,86 @@
 # Peasy skills for Claude
 
-Two Claude skills, built by [KeyValue](https://www.keyvalue.systems) for the Peasy team, that take a feature from rough idea to groomable Jira epic with an on-brand mockup.
+Two Claude skills that take a Peasy feature from rough idea to a Jira-ready epic with an on-brand mockup. Built by [KeyValue](https://www.keyvalue.systems) for the Peasy team.
 
-| Plugin | What it does |
-|---|---|
-| **peasy-brainstormer** | Turns a one-line feature idea into a Jira-style PRD. Thinks like a senior Peasy PM, asks only the questions that matter (sister brands, NL/FR, GDPR, FSMA, regulators), plays back the brief, optionally gets a mockup, then outputs an epic + child stories with Given/When/Then acceptance criteria as one HTML page. |
-| **peasy-design** | Designs, writes and reviews anything Peasy (screens, flows, copy, decks, audits) on the Peasy Design System. Ships with an offline copy of the design system, so it works without any extra access. |
+- **peasy-brainstormer**: turns a one-line idea into a Jira-style PRD (epic + stories with acceptance criteria).
+- **peasy-design**: designs, writes and reviews Peasy screens, flows, copy and decks on the Peasy Design System.
 
-Install **both**: the brainstormer calls peasy-design for its mockups.
+Install both. The brainstormer uses peasy-design for its mockups.
 
 ---
 
-## 1. Install
+## Install
 
-Pick the option that matches how you use Claude.
+### Claude app (desktop or claude.ai)
 
-### Option A: Claude app (desktop or claude.ai), recommended for PMs and designers
-
-There are two ways to install in the app. Adding the marketplace link is quickest and keeps you on the latest version.
-
-**A1. Add from the marketplace link**
-
-1. In Claude, open **Customize → Plugins**. On the right side, choose **Add marketplace**.
-2. Paste this link and confirm:
+1. Open **Customize → Plugins**. On the right side, choose **Add marketplace**.
+2. Paste this link:
    ```text
    https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace
    ```
-   (The short form `KeyValueSoftwareSystems/peasy-claude-marketplace` also works.)
-3. Install **peasy-brainstormer** and **peasy-design** from the marketplace.
-4. Optional: turn on **Sync automatically** so new releases arrive on their own.
+3. Install **peasy-brainstormer** and **peasy-design**.
 
-**A2. Upload the plugin files**
+Needs a paid Claude plan. If you don't see Plugins, ask your Claude admin to allow plugins.
 
-1. Download both files from the [latest release](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest):
-   - [`peasy-brainstormer.plugin`](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest/download/peasy-brainstormer.plugin)
-   - [`peasy-design.plugin`](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest/download/peasy-design.plugin)
-2. In Claude, open **Customize → Plugins → Add plugin → Upload** and upload the first file. Repeat for the second.
+### Claude Code
 
-Either way, check that both show as enabled in **Customize → Plugins**.
-
-> Requires a paid Claude plan (Pro, Max, Team or Enterprise). If you don't see Plugins, ask your Claude admin to allow plugins and skills.
-
-**Admins (Team/Enterprise):** after installing, use **Publish to organization** on each plugin so everyone at Peasy gets it without installing it themselves. (Organization **Sync from GitHub** only accepts private or internal repos, so it can't be used with this public repo.)
-
-### Option B: Claude Code (terminal)
+Paste this into Claude Code:
 
 ```text
-/plugin marketplace add KeyValueSoftwareSystems/peasy-claude-marketplace
-/plugin install peasy-brainstormer@peasy-claude-marketplace
-/plugin install peasy-design@peasy-claude-marketplace
+Install the Peasy plugins: add the marketplace KeyValueSoftwareSystems/peasy-claude-marketplace, then install peasy-brainstormer and peasy-design from it.
 ```
 
-Restart Claude Code when prompted.
+Restart Claude Code when it's done.
 
 ---
 
-## 2. Try it
+## Try it
 
 Start a new chat and type:
 
 > Brainstorm adding a new energy supplier to the Peasy comparison.
 
-What happens:
+Claude asks a few quick questions, plays back a brief, offers a mockup, then gives you one HTML page with the epic and stories. Say **"quick"** for a shorter run.
 
-1. Claude asks 1–2 short rounds of multiple-choice questions. Answer in one click, or say **"use defaults"**.
-2. It plays back a short brief. Confirm or correct it.
-3. It asks whether to generate a mockup. **"Yes, key screens"** makes up to 3 screens in the Peasy style.
-4. You get one HTML page: the epic, its stories with acceptance criteria, Definition of Ready, open questions and the embedded mockup. Each issue has **Copy as Jira markup**.
-
-Say **"quick"** for a single round and one screen.
-
-More prompts:
+More to try:
 
 - "Write a ticket for itsme and Google login on Peasy."
 - "Design the Peasy car-insurance result page in Dutch."
 - "Review this screen against the Peasy design system." (attach a screenshot)
-- "Make an on-brand Peasy slide on our Q4 energy results."
 
-Finished examples are in [`examples/`](examples/): open any `index.html` in your browser.
-
-| Example | Shows |
-|---|---|
-| [`energy-supplier-prd/`](examples/energy-supplier-prd/) | Current output: Jira-style PRD with the 5-screen mockup embedded |
-| [`energy-partner-ticket/`](examples/energy-partner-ticket/) | Earlier format: partner integration with failure paths and ops stories |
-| [`itsme-google-login/`](examples/itsme-google-login/) | Earlier format: identity and SSO epic |
-
-How the skill flows: [`docs/flows/`](docs/flows/) (demo, user and call flow, plus a zoomable viewer).
+See finished results in [`examples/`](examples/).
 
 ---
 
-## 3. Update
+## Update
 
-- **Claude app, added from the marketplace link:** updates arrive automatically if **Sync automatically** is on. Otherwise use **Check for updates** in **Customize → Plugins**.
-- **Claude app, uploaded files:** download the new `.plugin` files from the [latest release](https://github.com/KeyValueSoftwareSystems/peasy-claude-marketplace/releases/latest) and upload them again. They replace the old version.
-- **Claude Code:** `/plugin marketplace update peasy-claude-marketplace`
+- **Claude app:** in **Customize → Plugins**, turn on **Sync automatically** or use **Check for updates**.
+- **Claude Code:** ask it to "update the Peasy plugins".
 
-See [CHANGELOG.md](CHANGELOG.md) for what changed.
+What changed: [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
-## 4. Good to know
+## Good to know
 
-- **Design system source.** peasy-design first tries the live Peasy Design System artifact on claude.ai. If you don't have access, it uses the bundled offline copy (snapshot 29 Oct 2026) automatically.
-- **Font.** Mockups embed Grold Rounded Slim. For downloaded `.pptx` decks, install the font on your machine (it's in `plugins/peasy-design/skills/peasy-design/design-system/fonts/`), subject to Peasy's font licence.
-- **No Jira connector yet.** The PRD is an HTML page. Use **Copy as Jira markup** per issue. Jira keys default to `PEASY-XXX` unless you give real ones.
-- **French.** UI copy is Dutch first. French strings are marked `[FR: todo]` and flagged by the linter.
-- **Placeholders, not guesses.** The skill never invents prices, commissions, partner deals or legal text. It writes `€ XX`, `[N]` and lists open questions instead.
-
-### Troubleshooting
+- **Placeholders, not guesses.** It never invents prices, partner deals or legal text. It writes `€ XX` and lists open questions instead.
+- **Dutch first.** French strings are marked `[FR: todo]`.
+- **No Jira connector yet.** Use **Copy as Jira markup** on each issue.
+- **Works offline.** peasy-design uses the live Peasy Design System if you have access, otherwise a bundled copy.
 
 | Problem | Fix |
 |---|---|
-| Claude doesn't use the skill | Mention Peasy in your prompt ("a Peasy ticket for…"), or start a new chat after installing. |
-| Mockup step is skipped | peasy-design isn't installed or enabled. Install both plugins. |
-| Upload fails | Upload the `.plugin` file as-is. Don't unzip it. |
-| Fonts look wrong in a deck | Install Grold Rounded Slim locally (see above). |
+| Claude doesn't use the skill | Mention Peasy in your prompt, or start a new chat after installing. |
+| Mockup step is skipped | Install and enable peasy-design too. |
+| Fonts look wrong in a deck | Install Grold Rounded Slim from `plugins/peasy-design/skills/peasy-design/design-system/fonts/`. |
 
 ---
 
 ## For maintainers
 
-```text
-.claude-plugin/marketplace.json      marketplace manifest (both plugins)
-plugins/
-  peasy-brainstormer/                0.5.0
-    skills/peasy-brainstormer/
-      SKILL.md
-      references/  peasy-context.md · pm-thinking.md · ticket-format.md
-      assets/prd/  template-jira.html · build.py · prd_lint.py · example-prd.json
-  peasy-design/                      1.1.0
-    skills/peasy-design/
-      SKILL.md
-      references/  brand-rules · audit-checklist · data-and-charts · product-docs
-      design-system/  tokens · components · fonts · assets · starter
-examples/  docs/flows/
-scripts/validate.py   checks manifests, frontmatter, versions, referenced files
-scripts/package.sh    builds dist/<plugin>.plugin
-.github/workflows/    CI validation; release on tag
-```
-
-**Release a change**
-
-1. Edit the skill. Bump `version` in the plugin's `.claude-plugin/plugin.json` **and** in `.claude-plugin/marketplace.json`.
-2. `python3 scripts/validate.py`
+1. Edit the skill. Bump `version` in the plugin's `.claude-plugin/plugin.json` and in `.claude-plugin/marketplace.json`.
+2. Run `python3 scripts/validate.py`.
 3. Add a line to `CHANGELOG.md`, commit, push.
-4. `git tag vX.Y.Z && git push origin vX.Y.Z`. GitHub Actions builds both `.plugin` files and publishes the release, so the download links above always serve the latest.
+4. `git tag vX.Y.Z && git push origin vX.Y.Z`. GitHub Actions validates and publishes the release.
 
-**Licence.** Code is MIT ([LICENSE](LICENSE)). Peasy brand assets, fonts and examples belong to Peasy and are not licensed for reuse ([NOTICE](NOTICE)).
-
-Maintained by KeyValue Software Systems for Peasy.
+Code is MIT ([LICENSE](LICENSE)). Peasy brand assets, fonts and examples belong to Peasy ([NOTICE](NOTICE)). Maintained by KeyValue Software Systems.
