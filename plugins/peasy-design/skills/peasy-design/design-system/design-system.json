@@ -1,0 +1,205 @@
+{
+ "v": 3,
+ "assetGroups": {
+  "Icons": {
+   "files": {
+    "peasy-icons-sheet.svg": {
+     "blob": "88690d663714c336e06c0697899b255b",
+     "name": "peasy-icons-sheet.svg",
+     "size": 77055,
+     "type": "image/svg+xml"
+    }
+   },
+   "name": "Icons",
+   "order": [
+    "peasy-icons-sheet.svg"
+   ],
+   "tile": "l"
+  },
+  "Logos": {
+   "files": {
+    "peasy-logo-white.svg": {
+     "blob": "8dbd2a7582d5dab0915ce9bbfcadbe2a",
+     "name": "peasy-logo-white.svg",
+     "size": 3629,
+     "type": "image/svg+xml"
+    },
+    "peasy-logo.svg": {
+     "blob": "20aaf49e95bde604c57d782e690b0d95",
+     "name": "peasy-logo.svg",
+     "size": 3629,
+     "type": "image/svg+xml"
+    }
+   },
+   "name": "Logos",
+   "order": [
+    "peasy-logo.svg",
+    "peasy-logo-white.svg"
+   ],
+   "tile": "l"
+  },
+  "Mascot": {
+   "files": {
+    "backdrop-1.jpg": {
+     "blob": "0040583d72181df27b204aa8200bf77c",
+     "name": "backdrop-1.jpg",
+     "size": 31794,
+     "type": "image/jpeg"
+    },
+    "backdrop-8.jpg": {
+     "blob": "859361c7d36cb31e48e13fc7f5294add",
+     "name": "backdrop-8.jpg",
+     "size": 28167,
+     "type": "image/jpeg"
+    },
+    "peasy-mascot-peek-bottom.png": {
+     "blob": "b36c0e691b8f644fd7b58ff1804209a2",
+     "name": "peasy-mascot-peek-bottom.png",
+     "size": 1200379,
+     "type": "image/png"
+    },
+    "peasy-mascot-peek-side.png": {
+     "blob": "cee7b208d0c5566690a3ffe8ab8523fb",
+     "name": "peasy-mascot-peek-side.png",
+     "size": 797868,
+     "type": "image/png"
+    },
+    "peasy-mascot-peek-tall.png": {
+     "blob": "1788a016d3643543931befaa3ffd09d0",
+     "name": "peasy-mascot-peek-tall.png",
+     "size": 1391980,
+     "type": "image/png"
+    },
+    "peasy-mascot-full.png": {
+     "name": "peasy-mascot-full.png",
+     "blob": "523b46eb4907751966098169f8e0feb1",
+     "size": 2205028,
+     "type": "image/png"
+    },
+    "backdrop-2.jpg": {
+     "name": "backdrop-2.jpg",
+     "blob": "a08786a26d0caefdb246e0839b774445",
+     "size": 56075,
+     "type": "image/jpeg"
+    },
+    "backdrop-3.jpg": {
+     "name": "backdrop-3.jpg",
+     "blob": "e9bc414713983bb389047abef655afbe",
+     "size": 52451,
+     "type": "image/jpeg"
+    },
+    "backdrop-4.jpg": {
+     "name": "backdrop-4.jpg",
+     "blob": "86f654c2142202b23eb42c992fb98a2c",
+     "size": 48998,
+     "type": "image/jpeg"
+    },
+    "backdrop-5.jpg": {
+     "name": "backdrop-5.jpg",
+     "blob": "2fc6cad1091ee377c884954f6550f8c1",
+     "size": 55225,
+     "type": "image/jpeg"
+    },
+    "backdrop-6.jpg": {
+     "name": "backdrop-6.jpg",
+     "blob": "59761c11dcb847a5a6a9509953c64ee4",
+     "size": 51054,
+     "type": "image/jpeg"
+    },
+    "backdrop-7.jpg": {
+     "name": "backdrop-7.jpg",
+     "blob": "d22e18ab7ffccdb227a4efee26d3b1c6",
+     "size": 48858,
+     "type": "image/jpeg"
+    },
+    "backdrop-9.jpg": {
+     "name": "backdrop-9.jpg",
+     "blob": "8d7f1b28c52bec852fd44b50383bbad6",
+     "size": 45519,
+     "type": "image/jpeg"
+    },
+    "backdrop-10.jpg": {
+     "name": "backdrop-10.jpg",
+     "blob": "5f761405dfb704751ac18f8a24844a2f",
+     "size": 66761,
+     "type": "image/jpeg"
+    },
+    "backdrop-11.jpg": {
+     "name": "backdrop-11.jpg",
+     "blob": "b23ae158902b5dc6736b31a81e9f8518",
+     "size": 59481,
+     "type": "image/jpeg"
+    }
+   },
+   "name": "Mascot",
+   "order": [
+    "peasy-mascot-full.png",
+    "peasy-mascot-peek-side.png",
+    "peasy-mascot-peek-tall.png",
+    "peasy-mascot-peek-bottom.png",
+    "backdrop-1.jpg",
+    "backdrop-2.jpg",
+    "backdrop-3.jpg",
+    "backdrop-4.jpg",
+    "backdrop-5.jpg",
+    "backdrop-6.jpg",
+    "backdrop-7.jpg",
+    "backdrop-8.jpg",
+    "backdrop-9.jpg",
+    "backdrop-10.jpg",
+    "backdrop-11.jpg"
+   ],
+   "tile": "m"
+  },
+  "Shapes": {
+   "files": {
+    "peasy-speech-bubbles.svg": {
+     "blob": "103c732d57b023baf009af8e586a8bf1",
+     "name": "peasy-speech-bubbles.svg",
+     "size": 3423,
+     "type": "image/svg+xml"
+    }
+   },
+   "name": "Shapes",
+   "order": [
+    "peasy-speech-bubbles.svg"
+   ],
+   "tile": "l"
+  }
+ },
+ "blobs": {},
+ "createdOnFiles": {
+  "at": "2026-10-26T10:20:00Z",
+  "v": 1
+ },
+ "docs": {
+  "readme": "project/README.md",
+  "sections": []
+ },
+ "groups": [
+  "Logos",
+  "Icons",
+  "Mascot",
+  "Shapes"
+ ],
+ "lastChange": {
+  "by": "Claude",
+  "via": "claude.ai chat",
+  "at": "2026-10-26T12:00:00Z",
+  "note": "Proposed tokens: interaction states, focus ring, feedback (success/warning/error/info), chart palette; border widths"
+ },
+ "layout": "files",
+ "libraries": [
+  {
+   "name": "react",
+   "version": "18"
+  },
+  {
+   "name": "react-dom",
+   "version": "18"
+  }
+ ],
+ "namespace": "Peasy",
+ "sections": {},
+ "title": "Peasy Design System"
+}

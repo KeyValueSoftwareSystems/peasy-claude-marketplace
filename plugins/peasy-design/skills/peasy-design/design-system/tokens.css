@@ -1,0 +1,138 @@
+/* Peasy design tokens — generated from tokens.json (29 Oct 2026). Link this before components/bundle.css. */
+@font-face{font-family:"Grold Rounded Slim";src:url("fonts/GroldRoundedSlim-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Grold Rounded Slim";src:url("fonts/GroldRoundedSlim-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Grold Rounded Slim";src:url("fonts/GroldRoundedSlim-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+:root{
+  --primary-500:#66C6E2;
+  --primary-400:#85D1E8;
+  --primary-300:#A3DDEE;
+  --primary-200:#C2E8F3;
+  --primary-100:#E0F4F9;
+  --secondary-500:#394295;
+  --secondary-600:#2E3577;
+  --secondary-400:#6168AA;
+  --secondary-300:#888EBF;
+  --secondary-200:#B0B3D5;
+  --secondary-100:#D7D9EA;
+  --tertiary-500:#F2A4C7;
+  --tertiary-100:#FCEDF4;
+  --dark-500:#17192B;
+  --dark-400:#464755;
+  --dark-300:#747580;
+  --dark-200:#A2A3AA;
+  --dark-100:#D1D1D5;
+  --cream-500:#F9F4EA;
+  --green-500:#009B67;
+  --ui-warning:#F5C011;
+  --ui-error:#F24236;
+  --white:#FFFFFF;
+  --page-bg:#FDFDFD;
+  --background:#F5F5F5;
+  --dropdown-bg:#FCFCFC;
+  --stroke:#DDDDDD;
+  --stroke-soft:#E4E4E4;
+  --secondary-700:#232859;
+  --state-hover-tint:#E0F4F9;
+  --state-pressed-tint:#C2E8F3;
+  --state-hover-border:#747580;
+  --state-disabled-bg:#F5F5F5;
+  --state-disabled-fg:#A2A3AA;
+  --state-disabled-border:#D1D1D5;
+  --focus-ring:#394295;
+  --focus-ring-on-dark:#FFFFFF;
+  --success-bg:#E6F5EF;
+  --success-border:#009B67;
+  --success-fg:#00704A;
+  --warning-bg:#FEF6DB;
+  --warning-border:#F5C011;
+  --warning-fg:#7A5C00;
+  --error-bg:#FEECEB;
+  --error-border:#F24236;
+  --error-fg:#C42B21;
+  --info-bg:#E0F4F9;
+  --info-border:#66C6E2;
+  --info-fg:#1E6A80;
+  --chart-1:#394295;
+  --chart-2:#1E8FB0;
+  --chart-3:#D9468A;
+  --chart-4:#009B67;
+  --chart-5:#B87D00;
+  --chart-6:#464755;
+  --chart-seq-100:#D7D9EA;
+  --chart-seq-200:#B0B3D5;
+  --chart-seq-300:#888EBF;
+  --chart-seq-400:#6168AA;
+  --chart-seq-500:#394295;
+  --chart-muted:#D1D1D5;
+  --chart-grid:#E4E4E4;
+  --chart-axis:#D1D1D5;
+  --chart-label:#747580;
+  --chart-reference:#17192B;
+  --s-1:4px;
+  --s-2:8px;
+  --s-3:12px;
+  --s-4:16px;
+  --s-5:20px;
+  --s-6:24px;
+  --s-8:32px;
+  --s-10:40px;
+  --s-12:48px;
+  --s-16:64px;
+  --s-20:80px;
+  --s-24:96px;
+  --rounded:4px;
+  --rounded-lg:8px;
+  --rounded-xl:12px;
+  --rounded-2xl:16px;
+  --rounded-3xl:24px;
+  --rounded-panel:40px;
+  --rounded-full:9999px;
+  --shadow-default:0 3px 4px rgba(196,196,196,0.25);
+  --shadow-s:0 2px 0 #f8f8f8;
+  --screen-sm:640px;
+  --screen-md:768px;
+  --screen-lg:1024px;
+  --screen-xl:1280px;
+  --screen-2xl:1400px;
+  --border-1:1px;
+  --border-2:2px;
+  --focus-ring-width:2px;
+  --focus-ring-offset:2px;
+  /* Used by bundle.css but not in tokens.json (Tailwind scale defaults; confirm with Peasy) */
+  --s-7:28px;--s-9:36px;--rounded-sm:2px;
+  --font-sans:"Grold Rounded Slim", "Nunito", "Varela Round", system-ui, sans-serif;
+  --display-size:72px;--display-line:64px;--display-weight:500;
+  --title-56-size:56px;--title-56-line:56px;--title-56-weight:500;
+  --title-48-size:48px;--title-48-line:48px;--title-48-weight:500;
+  --title-36-size:36px;--title-36-line:36px;--title-36-weight:500;
+  --title-30-size:30px;--title-30-line:36px;--title-30-weight:500;
+  --title-24-size:24px;--title-24-line:24px;--title-24-weight:500;
+  --title-18-size:18px;--title-18-line:22px;--title-18-weight:500;
+  --title-16-size:16px;--title-16-line:24px;--title-16-weight:700;
+  --body-18-size:18px;--body-18-line:24px;--body-18-weight:400;
+  --body-18-medium-size:18px;--body-18-medium-line:24px;--body-18-medium-weight:500;
+  --body-16-size:16px;--body-16-line:20px;--body-16-weight:400;
+  --body-16-medium-size:16px;--body-16-medium-line:20px;--body-16-medium-weight:500;
+  --body-14-size:14px;--body-14-line:20px;--body-14-weight:400;
+  --body-14-medium-size:14px;--body-14-medium-line:1.24;--body-14-medium-weight:500;
+  --body-12-size:12px;--body-12-line:1.5;--body-12-weight:400;
+  --body-12-bold-size:12px;--body-12-bold-line:1.5;--body-12-bold-weight:700;
+}
+.display{font-family:var(--font-sans);font-size:72px;line-height:64px;font-weight:500}
+.title-56{font-family:var(--font-sans);font-size:56px;line-height:56px;font-weight:500}
+.title-48{font-family:var(--font-sans);font-size:48px;line-height:48px;font-weight:500}
+.title-36{font-family:var(--font-sans);font-size:36px;line-height:36px;font-weight:500}
+.title-30{font-family:var(--font-sans);font-size:30px;line-height:36px;font-weight:500}
+.title-24{font-family:var(--font-sans);font-size:24px;line-height:24px;font-weight:500}
+.title-18{font-family:var(--font-sans);font-size:18px;line-height:22px;font-weight:500}
+.title-16{font-family:var(--font-sans);font-size:16px;line-height:24px;font-weight:700}
+.body-18{font-family:var(--font-sans);font-size:18px;line-height:24px;font-weight:400}
+.body-18-medium{font-family:var(--font-sans);font-size:18px;line-height:24px;font-weight:500}
+.body-16{font-family:var(--font-sans);font-size:16px;line-height:20px;font-weight:400}
+.body-16-medium{font-family:var(--font-sans);font-size:16px;line-height:20px;font-weight:500}
+.body-14{font-family:var(--font-sans);font-size:14px;line-height:20px;font-weight:400}
+.body-14-medium{font-family:var(--font-sans);font-size:14px;line-height:1.24;font-weight:500}
+.body-12{font-family:var(--font-sans);font-size:12px;line-height:1.5;font-weight:400}
+.body-12-bold{font-family:var(--font-sans);font-size:12px;line-height:1.5;font-weight:700}
+html,body{background:var(--page-bg);color:var(--dark-500);font-family:var(--font-sans)}
+:focus-visible{outline:var(--focus-ring-width) solid var(--focus-ring);outline-offset:var(--focus-ring-offset)}

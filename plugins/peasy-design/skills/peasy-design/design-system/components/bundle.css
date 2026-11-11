@@ -1,0 +1,84 @@
+/* Peasy components — values from the Figma Primitives/Components pages; colours, spacing and radii come from tokens.css variables. */
+.pe-icon{display:inline-block;flex:none;vertical-align:middle}
+.pe-green{color:var(--green-500)}
+/* Primary button: L 56 / M 48 / S 40 high, radius 8, gap 8 */
+.pe-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);border:0;border-radius:var(--rounded-lg);font-family:var(--font-sans);font-weight:500;font-size:16px;line-height:20px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.pe-btn-L{height:56px;padding:0 var(--s-6)} .pe-btn-M{height:48px;padding:0 var(--s-5)} .pe-btn-S{height:40px;padding:0 var(--s-4);font-size:14px}
+.pe-btn-full{background:var(--secondary-500);color:var(--white)} .pe-btn-full:hover{background:var(--secondary-600)}
+.pe-btn-outline{background:transparent;box-shadow:inset 0 0 0 2px var(--stroke);color:var(--dark-500)}
+.pe-btn-outline.pe-on-dark{box-shadow:inset 0 0 0 2px var(--white);color:var(--white)}
+.pe-btn-M.pe-btn-outline,.pe-btn-S.pe-btn-outline{font-size:14px}
+.pe-btn:disabled{background:var(--background);color:var(--dark-200);box-shadow:none;cursor:not-allowed}
+.pe-btn-block{display:flex;width:100%}
+.pe-btn:focus-visible,.pe-iconbtn:focus-visible,.pe-pill:focus-visible,.pe-link:focus-visible,.pe-faq-q:focus-visible{outline:2px solid var(--primary-500);outline-offset:2px}
+/* Text link CTA: label + 1px underline, 6–8px offset */
+.pe-link{font-family:var(--font-sans);color:var(--dark-500);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}
+.pe-link-L{font-size:18px;line-height:24px;text-underline-offset:8px} .pe-link-M{font-size:16px;line-height:20px} .pe-link-S{font-size:14px;line-height:20px}
+.pe-link-dark{color:var(--white);font-weight:500}
+/* Icon button: L 72 r16 / M 56 r12 / S 40 r8, 2px stroke */
+.pe-iconbtn{display:inline-flex;align-items:center;justify-content:center;flex:none;background:transparent;border:0;box-shadow:inset 0 0 0 2px var(--stroke);color:var(--dark-500);cursor:pointer;padding:0}
+.pe-iconbtn-L{width:72px;height:72px;border-radius:var(--rounded-2xl)} .pe-iconbtn-M{width:56px;height:56px;border-radius:var(--rounded-xl)} .pe-iconbtn-S{width:40px;height:40px;border-radius:var(--rounded-lg)}
+/* Fields: label 14 Medium, field 44 high, radius 4, 1px stroke, 16px padding */
+.pe-field{display:flex;flex-direction:column;gap:var(--s-2);font-family:var(--font-sans);max-width:320px}
+.pe-field-h{flex-direction:row;align-items:flex-start;gap:var(--s-3);max-width:440px} .pe-field-h .pe-label{width:112px;flex:none;padding-top:13px}
+.pe-field-col{display:flex;flex-direction:column;gap:var(--s-2);flex:1}
+.pe-label{font-size:14px;line-height:1.24;font-weight:500;color:var(--dark-500)}
+.pe-req{color:var(--tertiary-500);font-weight:800} .pe-opt{color:var(--dark-200)}
+.pe-input{box-sizing:border-box;width:100%;height:44px;padding:0 var(--s-4);border:0;border-radius:var(--rounded);background:var(--white);box-shadow:inset 0 0 0 1px var(--stroke);font:400 14px/20px var(--font-sans);color:var(--dark-500);outline:none}
+.pe-input::placeholder{color:var(--dark-200)}
+.pe-input:focus,.pe-input.is-focus{box-shadow:inset 0 0 0 2px var(--primary-500)}
+.pe-input:disabled{background:var(--background);color:var(--dark-200)}
+.pe-has-error .pe-input{box-shadow:inset 0 0 0 2px var(--tertiary-500)}
+.pe-error{margin:0;font-size:12px;line-height:1.5;font-weight:500;color:var(--ui-error)}
+.pe-help{margin:0;font-size:12px;line-height:1.5;font-weight:500;color:var(--dark-300)}
+.pe-select-wrap{position:relative} .pe-select{appearance:none;background:var(--dropdown-bg);padding-right:40px;box-shadow:inset 0 0 0 1px var(--stroke),var(--shadow-s)}
+.pe-select-chev{position:absolute;right:16px;top:16px;pointer-events:none;color:var(--dark-500)}
+.pe-textarea{height:120px;padding:var(--s-5);resize:vertical}
+/* Checkbox 16 r2 (active green) and radio 16 circle (active blue) */
+.pe-check,.pe-radio{display:inline-flex;align-items:center;gap:10px;font:400 14px/20px var(--font-sans);color:var(--dark-500);cursor:pointer;position:relative}
+.pe-check input,.pe-radio input{position:absolute;opacity:0;width:16px;height:16px;margin:0}
+.pe-check-box{width:16px;height:16px;border-radius:var(--rounded-sm);background:var(--white);box-shadow:inset 0 0 0 1px var(--stroke);display:inline-flex;align-items:center;justify-content:center;color:transparent}
+.pe-check:hover .pe-check-box{box-shadow:inset 0 0 0 1px var(--dark-300)}
+.pe-check input:checked+.pe-check-box{background:var(--green-500);box-shadow:none;color:var(--white)}
+.pe-radio-dot{width:16px;height:16px;border-radius:var(--rounded-full);background:var(--white);box-shadow:inset 0 0 0 1px var(--stroke);display:inline-flex;align-items:center;justify-content:center}
+.pe-radio input:checked+.pe-radio-dot{background:var(--primary-500);box-shadow:none}
+.pe-radio input:checked+.pe-radio-dot::after{content:"";width:6px;height:6px;border-radius:var(--rounded-full);background:var(--white)}
+.pe-check input:focus-visible+.pe-check-box,.pe-radio input:focus-visible+.pe-radio-dot{outline:2px solid var(--primary-500);outline-offset:2px}
+.is-disabled{color:var(--dark-200);cursor:not-allowed} .is-disabled .pe-check-box,.is-disabled .pe-radio-dot{background:var(--background)}
+/* Tag, selector pill, badge */
+.pe-tag{display:inline-flex;align-items:center;height:32px;padding:0 var(--s-3);background:var(--white);box-shadow:inset 0 0 0 1px var(--stroke);border-radius:var(--rounded-lg);font:500 12px/1.5 var(--font-sans);color:var(--dark-500)}
+.pe-pill{display:inline-flex;align-items:center;border:0;border-radius:var(--rounded-full);background:transparent;box-shadow:inset 0 0 0 2px var(--white);font:500 14px/20px var(--font-sans);color:var(--dark-500);cursor:pointer}
+.pe-pill-L{height:48px;padding:0 var(--s-6);font-size:16px} .pe-pill-M{height:40px;padding:0 var(--s-4)} .pe-pill-S{height:32px;padding:0 var(--s-3);font-size:12px}
+.pe-pill[aria-pressed=true]{background:var(--white);box-shadow:inset 0 0 0 1px var(--stroke)}
+.pe-badge{display:inline-flex;align-items:center;height:24px;padding:0 var(--s-2);background:var(--ui-warning);border-radius:var(--rounded);font:700 12px/1.5 var(--font-sans);color:var(--dark-500)}
+/* Cards: white, 1px stroke */
+.pe-card{box-sizing:border-box;background:var(--white);box-shadow:inset 0 0 0 1px var(--stroke);border-radius:var(--rounded-3xl);font-family:var(--font-sans);color:var(--dark-500)}
+.pe-card-title{display:block;margin:0;font-size:18px;line-height:22px;font-weight:500}
+.pe-card-text{margin:var(--s-3) 0 0;font-size:16px;line-height:20px;color:var(--dark-300)}
+.pe-offer{position:relative;width:349px;display:flex;flex-direction:column;gap:var(--s-10);padding:var(--s-6) var(--s-8) var(--s-8);box-shadow:inset 0 0 0 1px var(--stroke),var(--shadow-default)}
+.pe-offer>.pe-badge{position:absolute;top:-12px;left:var(--s-8)}
+.pe-offer-top{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:var(--s-4);border-bottom:1px solid var(--stroke)}
+.pe-offer-brand{font-size:18px;font-weight:500}
+.pe-price{text-align:right;font-size:18px;line-height:24px;font-weight:700} .pe-price small{display:block;font-size:12px;line-height:1.5;font-weight:400;color:var(--dark-200)}
+.pe-offer-name{margin:0;font-size:24px;line-height:24px;font-weight:700}
+.pe-feat{list-style:none;margin:var(--s-3) 0 0;padding:0;display:grid;gap:var(--s-3)}
+.pe-feat li{display:flex;align-items:center;gap:var(--s-2);font-size:16px;line-height:20px;font-weight:500;color:var(--dark-300)} .pe-feat .pe-icon{color:var(--green-500)}
+.pe-perk{width:346px;display:flex;flex-direction:column;align-items:flex-start;gap:var(--s-9);padding:var(--s-8)}
+.pe-usp-tile{width:64px;height:64px;border-radius:var(--rounded-2xl);background:var(--tertiary-500);display:inline-flex;align-items:center;justify-content:center;color:var(--dark-500)}
+.pe-news{width:339px;padding:var(--s-2) var(--s-2) var(--s-8);border-radius:20px;display:flex;flex-direction:column;gap:var(--s-6)}
+.pe-news-img{height:177px;border-radius:var(--rounded-2xl);background:var(--primary-100) center/cover no-repeat;padding:var(--s-3)}
+.pe-news-body{padding:0 var(--s-6);display:flex;flex-direction:column;gap:var(--s-3)} .pe-news-body .pe-card-text{margin:0}
+.pe-meta{margin:0;display:flex;align-items:center;gap:var(--s-2);font-size:12px;line-height:1.5;color:var(--dark-300)}
+.pe-contact{display:flex;align-items:center;gap:var(--s-6);padding:var(--s-6);max-width:627px}
+.pe-contact-ic{width:56px;height:56px;border-radius:var(--rounded-2xl);background:var(--primary-100);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.pe-contact-txt{flex:1} .pe-contact .pe-card-text{font-size:14px;margin-top:var(--s-1)}
+.pe-faq{background:var(--white);box-shadow:inset 0 0 0 1px var(--stroke);border-radius:var(--rounded-2xl);padding:var(--s-7) var(--s-8);font-family:var(--font-sans);max-width:759px}
+.pe-faq-row+.pe-faq-row{border-top:1px solid var(--stroke-soft)}
+.pe-faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:var(--s-8);padding:var(--s-2) 0;background:none;border:0;cursor:pointer;font:500 18px/22px var(--font-sans);color:var(--dark-500);text-align:left}
+.pe-faq-q .is-open .pe-icon{transform:rotate(180deg)}
+.pe-faq-a{margin:0 0 var(--s-4);font-size:16px;line-height:20px;color:var(--dark-300)}
+.pe-search{display:inline-flex;align-items:center;gap:var(--s-2);height:40px;padding:0 var(--s-4);border-radius:40px;box-shadow:inset 0 0 0 1px var(--stroke);color:var(--dark-500);width:355px;box-sizing:border-box}
+.pe-search input{border:0;outline:0;flex:1;font:400 18px/24px var(--font-sans);color:var(--dark-500);background:transparent} .pe-search input::placeholder{color:var(--dark-300)}
+.pe-crumb{display:inline-flex;align-items:center;gap:var(--s-2);font:400 12px/1.5 var(--font-sans);color:var(--dark-500);white-space:pre}
+.pe-uspbar{display:flex;justify-content:space-between;align-items:center;gap:var(--s-6);padding:var(--s-2) 0 var(--s-3);border-bottom:1px solid var(--stroke);font:500 14px/1.24 var(--font-sans);color:var(--dark-500)}
+.pe-usps{display:flex;gap:var(--s-6);color:var(--dark-300)} .pe-usps span,.pe-service{display:inline-flex;align-items:center;gap:var(--s-2);white-space:nowrap} .pe-service span{font-weight:400;color:var(--dark-400)}

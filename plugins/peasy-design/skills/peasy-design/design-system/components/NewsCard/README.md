@@ -1,0 +1,1 @@
+News/blog card: 339px, radius 20, image 177px high with radius 16, date row with CalendarDots, Medium 18 title (max 2 lines), `dark-300` text, text link. Supply real images; the preview uses a blue tint as placeholder.

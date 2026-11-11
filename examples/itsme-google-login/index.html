@@ -1,0 +1,266 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PEASY-XXX · itsme and Google login</title>
+<style>
+  :root{--ink:#17192B;--ink2:#464755;--ink3:#747580;--muted:#A2A3AA;--line:#DDDDDD;--soft:#E4E4E4;
+    --bg:#F5F5F5;--card:#FFFFFF;--purple:#394295;--blue:#66C6E2;--blue1:#E0F4F9;--pink1:#FCEDF4;--cream:#F9F4EA;
+    --green:#009B67;--warn:#F5C011;--warn1:#FEF6DB;--err:#F24236}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Grold Rounded Slim","Nunito","Varela Round",system-ui,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 16px 64px}
+  .crumbs{font-size:13px;color:var(--ink3);margin-bottom:8px}
+  .crumbs b{color:var(--purple)}
+  h1{font-size:26px;line-height:1.25;font-weight:600;margin:4px 0 16px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:16px}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2);margin:0 0 10px}
+  h3{font-size:16px;margin:0}
+  p{margin:0 0 8px}
+  ul{margin:0;padding-left:20px}
+  li{margin:2px 0}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+  th{color:var(--ink2);font-weight:600;background:#FAFAFA}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:600px){.two{grid-template-columns:1fr}}
+  .in h3{color:var(--green)} .out h3{color:var(--ink3)}
+  .story{border:1px solid var(--soft);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+  .story-head{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .sid{font-weight:700;color:var(--purple)}
+  .pts{background:var(--blue1);border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;white-space:nowrap}
+  .ac{margin-top:6px;font-size:14px}
+  .ac div{padding:4px 0 4px 10px;border-left:3px solid var(--blue);margin:6px 0}
+  .ac b{color:var(--ink2)}
+  .meta dt{font-size:12px;color:var(--ink3);margin-top:12px}
+  .meta dd{margin:2px 0 0;font-weight:500}
+  .pill{display:inline-block;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600;margin:2px 4px 2px 0}
+  .status{background:var(--blue1);color:#1E6A80}
+  .prio{background:var(--warn1);color:#7A5C00}
+  .lbl{background:#EEF0F7;color:var(--purple)}
+  .assume{background:var(--cream);border-radius:12px;padding:12px 14px}
+  .assume li::marker{color:var(--warn)}
+  .oq li{margin:6px 0}
+  .owner{font-size:12px;color:var(--ink3)}
+  .todo{color:var(--muted);font-style:italic}
+  .attach a{color:var(--purple);font-weight:600}
+  .frame{width:100%;height:560px;border:1px solid var(--line);border-radius:12px;margin-top:12px;background:#fff}
+  .note{font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="crumbs">Peasy / Epics / <b>PEASY-XXX</b></div>
+  <h1>Let users log in with itsme and Google</h1>
+
+  <div class="grid">
+    <main>
+
+      <section class="card">
+        <h2>Summary</h2>
+        <p>Peasy users can only log in with email and password today. This epic adds itsme and Google login on peasy.be, links them automatically to existing accounts with a verified matching email, and pre-fills name, address and date of birth from itsme so insurance and mortgage quotes need less typing.</p>
+      </section>
+
+      <section class="card">
+        <h2>Context</h2>
+        <ul>
+          <li>Current behaviour: Login and Register with email + password and "Forgot password". No social login, no itsme.</li>
+          <li>itsme is Belgium's digital identity app: 8M+ users (March 2026), eIDAS-notified at assurance level high. Belgian users know it from banking and government services.</li>
+          <li>Insurance and mortgage flows ask for name, address and date of birth; itsme can supply these verified.</li>
+          <li>Personal data controller is Verzekeringen NV; data is shared within the group (Hypotheekwinkel BV, e-Contract BV, Horizon Holdco NV).</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Scope</h2>
+        <div class="two">
+          <div class="in"><h3>In scope</h3><ul>
+            <li>Sign up / log in with itsme and Google on peasy.be web (desktop + mobile web, NL + FR)</li>
+            <li>Auto-link to an existing account when the provider returns a verified matching email</li>
+            <li>itsme pre-fill: name, address, date of birth; itsme data overwrites old data and the changes are shown</li>
+            <li>Privacy notice for itsme data</li>
+            <li>Account page "Inlogmethodes": view, link, unlink (if another method remains)</li>
+          </ul></div>
+          <div class="out"><h3>Out of scope</h3><ul>
+            <li>Apple, Microsoft, Facebook login</li>
+            <li>Mobile app</li>
+            <li>Hypotheek.winkel, Verzekeringen.be, Aanbieders.be, Meilleurtaux brands</li>
+            <li>Removing email + password</li>
+            <li>itsme e-signature for contracts</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Decisions made</h2>
+        <table>
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Providers in v1</td><td>itsme, Google</td></tr>
+          <tr><td>Existing email accounts</td><td>Auto-link when the provider returns a verified matching email</td></tr>
+          <tr><td>Pre-fill from itsme</td><td>Name, address, date of birth</td></tr>
+          <tr><td>Sister brands</td><td>Peasy only for v1</td></tr>
+          <tr><td>Email + password</td><td>Kept as fallback</td></tr>
+          <tr><td>itsme data differs from saved profile</td><td>itsme wins; show the user what changed</td></tr>
+          <tr><td>Surfaces</td><td>Web only</td></tr>
+          <tr><td>Managing login methods</td><td>In v1: view, link and unlink, unlink blocked for the last method</td></tr>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>User stories</h2>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S1</span> Sign up and log in with itsme</h3><span class="pts">5 pts</span></div>
+          <p>As a Belgian user, I want to log in with itsme, so that I don't need to remember another password.</p>
+          <div class="ac">
+            <div><b>Given</b> I'm on the login or register page <b>When</b> I choose "Inloggen met itsme" and approve in the itsme app <b>Then</b> I'm logged in, or a new account is created if none matches.</div>
+            <div><b>Given</b> I cancel in the itsme app <b>When</b> I return to Peasy <b>Then</b> I see the error banner "Inloggen met itsme is mislukt of geannuleerd…" and no account is created.</div>
+            <div><b>Given</b> itsme is unavailable <b>When</b> I try to log in <b>Then</b> I see the same error banner and Google and email login stay usable.</div>
+            <div><b>Given</b> itsme returns my national register number <b>When</b> my account is saved <b>Then</b> the number is not stored.</div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S2</span> Sign up and log in with Google</h3><span class="pts">3 pts</span></div>
+          <p>As a user, I want to log in with my Google account, so that signing up takes one click.</p>
+          <div class="ac">
+            <div><b>Given</b> I choose "Inloggen met Google" <b>When</b> Google returns a verified email <b>Then</b> I'm logged in, or a new account is created if none matches.</div>
+            <div><b>Given</b> I close the Google window or deny access <b>When</b> I return to Peasy <b>Then</b> I see an error banner and stay on the login page.</div>
+            <div><b>Given</b> Google returns an email that is not verified <b>When</b> I log in <b>Then</b> no account is created or linked and I'm asked to use another method.</div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S3</span> Link SSO to my existing account</h3><span class="pts">5 pts</span></div>
+          <p>As an existing email + password user, I want itsme or Google linked to my account automatically, so that I keep my comparisons and contracts.</p>
+          <div class="ac">
+            <div><b>Given</b> the provider returns a verified email matching an existing Peasy account <b>When</b> I log in <b>Then</b> the provider is linked to that account and I see "We hebben itsme gekoppeld aan je account …".</div>
+            <div><b>Given</b> a provider was linked automatically <b>When</b> linking succeeds <b>Then</b> I receive a notification email so I can react if it wasn't me.</div>
+            <div><b>Given</b> the provider email is unverified or missing (itsme may not return one) <b>When</b> I log in <b>Then</b> no automatic link happens and a separate account is not created silently. <span class="note">(Behaviour TBD, see open question 2)</span></div>
+            <div><b>Given</b> my account is linked <b>When</b> I log in with email + password later <b>Then</b> that still works.</div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S4</span> Pre-fill my profile from itsme</h3><span class="pts">3 pts</span></div>
+          <p>As a user requesting an insurance or mortgage quote, I want my details filled from itsme, so that I type less and avoid mistakes.</p>
+          <div class="ac">
+            <div><b>Given</b> I log in with itsme for the first time <b>When</b> I land on "Klopt dit?" <b>Then</b> I see name, date of birth and address from itsme and a short notice of what we store and why, with a link to the privacy policy.</div>
+            <div><b>Given</b> my saved profile has a different address or empty date of birth <b>When</b> itsme returns data <b>Then</b> itsme values overwrite the old ones and each changed field shows the old value struck through with "Gewijzigd" or "Nieuw".</div>
+            <div><b>Given</b> I choose "Annuleren" on the confirmation screen <b>When</b> I leave <b>Then</b> no itsme data is saved and I'm not logged in. <span class="note">(Assumption)</span></div>
+            <div><b>Given</b> itsme returns no address <b>When</b> the screen loads <b>Then</b> the address row is hidden and my existing address is kept.</div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S5</span> Manage my login methods</h3><span class="pts">3 pts</span></div>
+          <p>As a logged-in user, I want to see, link and unlink my login methods, so that I stay in control of my account.</p>
+          <div class="ac">
+            <div><b>Given</b> I open Mijn account › Inlogmethodes <b>When</b> the page loads <b>Then</b> I see itsme, Google and E-mail en wachtwoord, each with status "Gekoppeld" or "Niet gekoppeld".</div>
+            <div><b>Given</b> a method is not linked <b>When</b> I choose "Koppelen" and complete the provider flow <b>Then</b> it shows as "Gekoppeld" with a success banner.</div>
+            <div><b>Given</b> I have two or more methods <b>When</b> I unlink one <b>Then</b> it's removed and I get a confirmation email.</div>
+            <div><b>Given</b> I have only one method left <b>When</b> I view it <b>Then</b> "Ontkoppelen" is disabled with the hint "Koppel eerst een andere methode…".</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>UX copy</h2>
+        <table>
+          <tr><th>Key</th><th>nl-BE</th><th>fr-BE</th></tr>
+          <tr><td>login.itsme</td><td>Inloggen met itsme</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>login.google</td><td>Inloggen met Google</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>login.divider</td><td>of met e-mail</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>login.error.itsme</td><td>Inloggen met itsme is mislukt of geannuleerd. Probeer opnieuw, of log in met Google of je e-mailadres.</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>prefill.title</td><td>Klopt dit?</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>prefill.intro</td><td>Deze gegevens kregen we van itsme. Zo hoef je ze niet zelf in te typen.</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>prefill.privacy</td><td>Wat bewaren we? Alleen deze gegevens, om je offertes voor verzekeringen en leningen sneller in te vullen. Je rijksregisternummer bewaren we niet. [Legal text: todo]</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>prefill.updated</td><td>We hebben je gegevens bijgewerkt</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>prefill.cta</td><td>Bevestigen en verdergaan</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>link.auto</td><td>We hebben itsme gekoppeld aan je account {email}.</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>methods.title</td><td>Inlogmethodes</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>methods.unlink.lastHint</td><td>Koppel eerst een andere methode voor je itsme ontkoppelt.</td><td class="todo">[FR: todo]</td></tr>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Non-functional</h2>
+        <ul>
+          <li><b>Privacy (GDPR):</b> lawful basis for storing itsme data TBD (contract vs consent); never store the national register number; log the itsme data source and timestamp; update privacy policy and record of processing (controller Verzekeringen NV). Retention follows existing rule for service users (5 years) unless Legal decides otherwise. [Legal text: todo]</li>
+          <li><b>Security:</b> OpenID Connect with PKCE, state and nonce checks; only auto-link on <code>email_verified = true</code>; notification email on every new link; existing session length and logout unchanged.</li>
+          <li><b>Accessibility:</b> WCAG 2.2 AA; provider buttons keyboard-reachable with visible <code>focus-ring</code>; error banner announced (<code>role="alert"</code>); disabled unlink explained in text, not colour alone.</li>
+          <li><b>Performance:</b> no extra load on the login page beyond provider buttons; provider SDKs loaded on click if possible.</li>
+          <li><b>Analytics:</b> <code>login_method_selected</code>, <code>login_success</code>, <code>login_failed</code> (with reason: cancelled / provider_error / unverified_email), <code>account_linked</code>, <code>account_unlinked</code>, <code>prefill_confirmed</code>, <code>prefill_cancelled</code>. Success target: TBD.</li>
+          <li><b>Rollout:</b> behind a feature flag. % rollout TBD.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Dependencies</h2>
+        <ul>
+          <li>itsme partner contract, scopes and test environment (via itsme or an approved broker)</li>
+          <li>Google Cloud OAuth client and consent screen verification</li>
+          <li>Official itsme and Google button assets and brand guidelines</li>
+          <li>Legal review of privacy notice and lawful basis (NL + FR)</li>
+          <li>Auth service supporting multiple identities per user</li>
+          <li>Email template for "new login method linked / unlinked"</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Assumptions</h2>
+        <div class="assume"><ul>
+          <li><b>Assumption:</b> Google's <code>email_verified</code> claim is trusted for auto-linking.</li>
+          <li><b>Assumption:</b> Peasy has (or will build) a "Mijn account" area where Inlogmethodes can live.</li>
+          <li><b>Assumption:</b> Cancelling the itsme confirmation screen aborts login rather than logging in without pre-fill.</li>
+          <li><b>Assumption:</b> The current auth stack can add OIDC providers without a rewrite.</li>
+        </ul></div>
+      </section>
+
+      <section class="card">
+        <h2>Open questions</h2>
+        <ol class="oq">
+          <li>Which itsme scopes and contract do we need (name, address, DOB, email?), and what does it cost? <span class="owner">Owner: Tech + Legal</span></li>
+          <li>itsme may not return a verified email. How do we link an itsme login to an existing email account then (ask for password, or email verification)? <span class="owner">Owner: Product + Tech</span></li>
+          <li>Lawful basis for storing itsme data: contract or consent? Does the notice need an explicit opt-in? <span class="owner">Owner: Legal</span></li>
+          <li>Does "itsme wins" need user confirmation for address changes that affect active insurance contracts? <span class="owner">Owner: Product + Legal</span></li>
+          <li>What does a user see in "Mijn account" today (quotes, contracts, documents)? Verify with Peasy. <span class="owner">Owner: Product</span></li>
+          <li>Should this login later extend to Hypotheek.winkel, Verzekeringen.be and Meilleurtaux Belgium? Affects identity architecture now. <span class="owner">Owner: Product</span></li>
+          <li>Success metric and target (e.g. share of logins via SSO, form completion time). <span class="owner">Owner: Product</span></li>
+          <li>Final French copy. <span class="owner">Owner: Content</span></li>
+        </ol>
+      </section>
+
+      <section class="card attach">
+        <h2>Attachments</h2>
+        <p>Mockup: <a href="sso-login-mockup.html" target="_blank" rel="noopener">sso-login-mockup.html</a> <span class="note">(generated by peasy-design, Voorbeelddata; 5 frames: login, login error, itsme confirm new, itsme confirm with changes, Inlogmethodes)</span></p>
+        <iframe class="frame" title="Mockup preview" src="sso-login-mockup.html"></iframe>
+      </section>
+
+    </main>
+
+    <aside class="card meta">
+      <h2>Details</h2>
+      <dl>
+        <dt>Status</dt><dd><span class="pill status">To groom</span></dd>
+        <dt>Type</dt><dd>Epic</dd>
+        <dt>Priority</dt><dd><span class="pill prio">Medium</span></dd>
+        <dt>Labels</dt><dd><span class="pill lbl">identity</span><span class="pill lbl">nl-fr</span><span class="pill lbl">gdpr</span></dd>
+        <dt>Components</dt><dd>Web, Emails</dd>
+        <dt>Brands</dt><dd>Peasy</dd>
+        <dt>Reporter</dt><dd>Sidharth</dd>
+        <dt>Estimate</dt><dd>19 pts <span class="note">(rough)</span></dd>
+        <dt>Created by</dt><dd>peasy-brainstormer</dd>
+      </dl>
+    </aside>
+  </div>
+</div>
+</body>
+</html>
+
+</body></html>

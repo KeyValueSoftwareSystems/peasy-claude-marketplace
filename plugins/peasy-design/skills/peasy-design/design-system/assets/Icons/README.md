@@ -1,0 +1,3 @@
+Sheet of the 37 Peasy line icons (32px grid, ink `dark-500` #17192B), labelled with their Figma names. Individual SVGs (32×32, one per icon, named as on the sheet) are in `svg/`. Recolour to white on dark surfaces.
+
+**Stroke weight (proposed, confirm with Peasy).** The icons are outlined 2px strokes on the 32px grid, so they thin out when scaled down (1px at 16px), which reads too light beside Grold Rounded Bold. Keep the rendered stroke optically even: 1.5px at 12–16px, 2px at 24–32px. With the outlined SVGs, add a matching `stroke: currentColor` with round joins and caps to each path: stroke-width 2 at 12px, 1 at 16px, 0.67 at 24px, 0 at 32px (viewBox units).

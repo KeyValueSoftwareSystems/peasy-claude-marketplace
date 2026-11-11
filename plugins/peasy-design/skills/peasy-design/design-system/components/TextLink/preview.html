@@ -1,0 +1,9 @@
+<!-- @dsCard group="Actions" height=110 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>TextLink</title>
+<style>body{margin:0;padding:20px;background:var(--page-bg);font-family:var(--font-sans);color:var(--dark-500)}</style></head>
+<body><div id="root"></div>
+<script>
+var P=window.Peasy,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,h('div',{style:{display:'flex',gap:32,alignItems:'baseline'}},h(P.TextLink,{size:'L'},'Bekijk alle aanbiedingen'),h(P.TextLink,null,'Lees meer'),h(P.TextLink,{size:'S'},'Bekijk alle contactmogelijkheden'))));
+</script></body></html>

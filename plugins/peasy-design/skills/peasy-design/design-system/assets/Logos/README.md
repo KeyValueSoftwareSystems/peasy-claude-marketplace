@@ -1,0 +1,1 @@
+Exact Peasy wordmark exported from Figma. Use `peasy-logo.svg` (ink `primary-500` #66C6E2) on white, cream and pink; use `peasy-logo-white.svg` (ink white) on `secondary-500` and photos. Header height 41px desktop, never below 24px; keep clear space of half the letter height. Never recolour to other hues or add effects.

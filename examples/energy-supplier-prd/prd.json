@@ -1,0 +1,762 @@
+{
+ "epic": {
+  "key": "TBD-100",
+  "title": "Energy - Supplier integration: New supplier via API",
+  "fields": {
+   "Type": "Epic",
+   "Status": "To groom",
+   "Priority": "Medium",
+   "Assignee": "TBD",
+   "Reporter": "Sidharth",
+   "Created": "2026-11-04",
+   "Updated": "2026-11-04",
+   "Components": "Web, Back-office, Emails",
+   "Fix version": "TBD",
+   "Labels": [
+    "energy",
+    "provider-onboarding",
+    "gdpr"
+   ]
+  },
+  "figma": "TBD",
+  "tdd": "TBD",
+  "summary": "Add a new energy supplier to the peasy.be energy comparison. Tariffs sync daily via the supplier API and switches are ordered through the same API.",
+  "problem": "Users can only compare and switch to current partners. Each new supplier today means manual tariff updates and manual order hand-over.",
+  "goals": [
+   "More offers for households in all three regions",
+   "Switch without re-entering data at the supplier",
+   "Reusable API integration for the next supplier"
+  ],
+  "metrics": [
+   [
+    "Completed switches to the new supplier / month",
+    "0",
+    "[X]"
+   ],
+   [
+    "API order success rate",
+    "n/a",
+    "≥ [X]%"
+   ],
+   [
+    "Results → switch conversion (energy)",
+    "[current]",
+    "no drop"
+   ],
+   [
+    "Orders needing expert fallback",
+    "n/a",
+    "≤ [X]%"
+   ]
+  ],
+  "people": {
+   "Business Owner(s)": "TBD",
+   "Functional Analyst(s)": "TBD",
+   "Key Stakeholder(s)": "Ops, Legal, IT team",
+   "QA / Tester(s)": "TBD"
+  },
+  "scope": {
+   "included": [
+    "Daily tariff sync",
+    "Electricity + gas, all three regions",
+    "Neutral ranking in results",
+    "Review + switch order via API",
+    "Expert fallback on API failure",
+    "Hide supplier on stale data",
+    "Order status + customer emails"
+   ],
+   "excluded": [
+    "Aanbieders.be and other brands",
+    "Sponsored placement",
+    "Manual tariff editing in Admin",
+    "Yearly re-check for this supplier",
+    "Moving house (verhuis) flow"
+   ]
+  },
+  "dependencies": [
+   "PEASY-XXX Supplier screen: supplier must exist in the Energy Engine",
+   "PEASY-XXX Electricity product specifications (New Engine Admin)",
+   "Grid and tax tariffs (Nettarieven, Heffingen) for the all-in yearly price",
+   "Signed partner agreement + API docs and sandbox from the supplier",
+   "Legal: consent text, privacy notice, data agreement with the supplier"
+  ],
+  "details": [
+   {
+    "title": "Non-functional",
+    "table": [
+     [
+      "Area",
+      "Requirement"
+     ],
+     [
+      "Security",
+      "API credentials in secrets store; TLS only; no personal data in logs"
+     ],
+     [
+      "Privacy",
+      "Personal data sent only to perform the requested switch; consent logged with timestamp"
+     ],
+     [
+      "Accessibility",
+      "WCAG 2.2 AA; errors in text, not colour only"
+     ],
+     [
+      "Performance",
+      "Results load time unchanged; tariffs read from Peasy store"
+     ],
+     [
+      "Observability",
+      "Sync and order metrics, alerts on failure rate, runbook for Ops"
+     ],
+     [
+      "Release",
+      "Feature flag per supplier = kill switch without deploy"
+     ]
+    ]
+   }
+  ],
+  "notes": [
+   "Ranking stays neutral: total yearly cost incl. VAT and grid costs.",
+   "Ranking and remuneration are disclosed on the results page (consumer law, CREG comparison rules: Legal to confirm).",
+   "Results read tariffs from Peasy's store, never live from the API."
+  ]
+ },
+ "tickets": [
+  {
+   "key": "TBD-101",
+   "type": "Story",
+   "moscow": "Must",
+   "points": 5,
+   "title": "Energy - Supplier integration: Import tariffs daily",
+   "description": "Import the supplier's electricity and gas tariffs from its API every night, with their validity period.",
+   "ac": [
+    {
+     "title": "Valid tariffs are stored",
+     "given": "the nightly sync runs at [02:00 CET]",
+     "when": "the API returns valid tariffs",
+     "then": [
+      "tariffs are stored per region and grid operator",
+      "each tariff keeps its valid-from and valid-to date"
+     ],
+     "and": [
+      "a last-updated timestamp is saved"
+     ]
+    },
+    {
+     "title": "Re-import does not duplicate",
+     "given": "a tariff already exists",
+     "when": "the same tariff is imported again",
+     "then": "it is updated, not duplicated"
+    },
+    {
+     "title": "Invalid records are rejected",
+     "given": "a record misses a required field",
+     "when": "the sync runs",
+     "then": [
+      "that record is skipped",
+      "the other records are stored",
+      "the error is logged for Ops"
+     ]
+    },
+    {
+     "title": "API errors keep previous tariffs",
+     "given": "the API times out or errors",
+     "when": "the sync runs",
+     "then": "it retries [3] times, then keeps the last valid tariffs"
+    }
+   ],
+   "notes": [
+    "Required fields: €/kWh, fixed fee, contract length, green %, region, valid-from.",
+    "API contract, rate limit and pagination: see Backend Technical Document."
+   ]
+  },
+  {
+   "key": "TBD-102",
+   "type": "Story",
+   "moscow": "Must",
+   "points": 3,
+   "title": "Energy - Supplier integration: Map products to the comparison model",
+   "description": "Map supplier products to Peasy's energy model so they compare like-for-like with other suppliers.",
+   "depends": [
+    "TBD-101"
+   ],
+   "ac": [
+    {
+     "title": "Mapped products are comparable",
+     "given": "a supplier product is imported",
+     "when": "mapping runs",
+     "then": "every field in the mapping table is filled or the product is rejected"
+    },
+    {
+     "title": "Unsupported fields are kept, not shown",
+     "given": "the supplier sends an unknown field",
+     "when": "mapping runs",
+     "then": "it is stored as a provider extra and not displayed"
+    },
+    {
+     "title": "No tariff for grid operator",
+     "given": "a product has no tariff for the user's grid operator",
+     "when": "the user compares",
+     "then": "the product is not shown"
+    }
+   ],
+   "details": [
+    {
+     "title": "Mapping table",
+     "table": [
+      [
+       "Peasy field",
+       "Supplier field",
+       "Type",
+       "Required"
+      ],
+      [
+       "price_type",
+       "[tbd]",
+       "fixed | variable",
+       "Yes"
+      ],
+      [
+       "energy_price_kwh",
+       "[tbd]",
+       "€ excl. VAT, single/dual/night",
+       "Yes"
+      ],
+      [
+       "fixed_fee_year",
+       "[tbd]",
+       "€ excl. VAT",
+       "Yes"
+      ],
+      [
+       "green_pct",
+       "[tbd]",
+       "0–100",
+       "Yes"
+      ],
+      [
+       "contract_months",
+       "[tbd]",
+       "integer",
+       "Yes"
+      ],
+      [
+       "region, grid_operator",
+       "[tbd]",
+       "enum",
+       "Yes"
+      ],
+      [
+       "prosumer_eligible",
+       "[tbd]",
+       "boolean",
+       "No"
+      ]
+     ]
+    }
+   ],
+   "notes": [
+    "Supplier prices are stored excl. VAT; VAT, grid and tax tariffs are added by the Energy Engine."
+   ]
+  },
+  {
+   "key": "TBD-103",
+   "type": "Story",
+   "moscow": "Must",
+   "points": 3,
+   "title": "Energy - Supplier integration: Show supplier in results",
+   "mock": "Scherm 1",
+   "description": "Show the new supplier in energy results, ranked like every other supplier.",
+   "depends": [
+    "TBD-102",
+    "TBD-109"
+   ],
+   "ac": [
+    {
+     "title": "Supplier is ranked neutrally",
+     "given": "the user completes the energy flow",
+     "when": "results load",
+     "then": "the supplier is ranked by total yearly cost",
+     "and": [
+      "equal prices keep the existing tie-break rule"
+     ]
+    },
+    {
+     "title": "Result card shows key data",
+     "given": "the supplier's result card",
+     "when": "it is displayed",
+     "then": [
+      "logo, product name",
+      "€ per month and € per year incl. VAT and grid costs",
+      "fixed/variable, green %, contract length",
+      "Overstappen button"
+     ]
+    },
+    {
+     "title": "Existing filters apply",
+     "given": "the user filters on 100% green",
+     "when": "the product is not 100% green",
+     "then": "the existing green filter rules apply"
+    },
+    {
+     "title": "Current supplier is handled",
+     "given": "the user's current supplier is the new supplier",
+     "when": "results load",
+     "then": "the existing current-supplier handling applies"
+    },
+    {
+     "title": "Ranking is explained",
+     "given": "the results page",
+     "when": "it is displayed",
+     "then": "the ranking and remuneration note is visible"
+    }
+   ],
+   "copy": [
+    [
+     "Button",
+     "Overstappen",
+     "",
+     "Switch"
+    ],
+    [
+     "Tag",
+     "Nieuw bij Peasy",
+     "",
+     "New at Peasy"
+    ],
+    [
+     "Price",
+     "€ XX per maand · € XX per jaar, incl. btw en netkosten",
+     "",
+     ""
+    ],
+    [
+     "Ranking note",
+     "We rangschikken op totale jaarprijs. Hoe we vergelijken en verdienen: zo werkt Peasy.",
+     "",
+     ""
+    ]
+   ],
+   "notes": [
+    "Logo: supplier delivers SVG + usage rights."
+   ]
+  },
+  {
+   "key": "TBD-104",
+   "type": "Story",
+   "moscow": "Must",
+   "points": 3,
+   "title": "Energy - Supplier integration: Hide supplier on stale tariffs",
+   "mock": "Scherm 1",
+   "description": "Hide the supplier when its tariffs are outdated so we never show or sell wrong prices.",
+   "depends": [
+    "TBD-101"
+   ],
+   "ac": [
+    {
+     "title": "Stale supplier is hidden",
+     "given": "the last sync is older than [48 h]",
+     "when": "a user compares",
+     "then": "the supplier is hidden from results and the switch flow"
+    },
+    {
+     "title": "User mid-flow is redirected",
+     "given": "the user is on the review screen",
+     "when": "the supplier becomes stale",
+     "then": [
+      "confirm is blocked",
+      "the user returns to refreshed results with a message"
+     ]
+    },
+    {
+     "title": "Ops is alerted",
+     "given": "the supplier is hidden",
+     "when": "it happens",
+     "then": "Ops gets an alert in [channel] with reason and last sync time"
+    },
+    {
+     "title": "Supplier returns automatically",
+     "given": "a valid sync completes",
+     "when": "the next comparison runs",
+     "then": "the supplier is shown again"
+    }
+   ],
+   "copy": [
+    [
+     "Stale message",
+     "Deze prijs is niet meer beschikbaar. Bekijk de bijgewerkte resultaten.",
+     "",
+     ""
+    ]
+   ]
+  },
+  {
+   "key": "TBD-105",
+   "type": "Story",
+   "moscow": "Must",
+   "points": 3,
+   "title": "Energy - Supplier integration: Review and validate switch details",
+   "mock": "Scherm 2",
+   "description": "Let the user check contract, address and EAN codes and give consent before the order is sent.",
+   "depends": [
+    "TBD-109"
+   ],
+   "ac": [
+    {
+     "title": "Review screen shows the deal",
+     "given": "the user clicks Overstappen",
+     "when": "the review screen loads",
+     "then": [
+      "product, contract length, € per month and per year",
+      "start date at least [35] days ahead",
+      "meter stays the same"
+     ]
+    },
+    {
+     "title": "Validation blocks invalid input",
+     "given": "a required field is empty or an EAN is invalid",
+     "when": "the user clicks Bevestig overstap",
+     "then": [
+      "the field is highlighted",
+      "a message shows below the field",
+      "nothing is sent"
+     ]
+    },
+    {
+     "title": "Consent is required",
+     "given": "consent is not ticked",
+     "when": "the user clicks Bevestig overstap",
+     "then": "the consent message shows and nothing is sent"
+    }
+   ],
+   "copy": [
+    [
+     "Button",
+     "Bevestig overstap",
+     "",
+     "Confirm switch"
+    ],
+    [
+     "Required",
+     "Dit veld is verplicht.",
+     "Ce champ est obligatoire.",
+     "This field is required."
+    ],
+    [
+     "EAN error",
+     "Vul een geldige EAN-code in (18 cijfers, begint met 54).",
+     "",
+     ""
+    ],
+    [
+     "Consent",
+     "[Legal text: todo]",
+     "",
+     ""
+    ]
+   ],
+   "details": [
+    {
+     "title": "Screen states",
+     "table": [
+      [
+       "State",
+       "Bevestig overstap",
+       "Message"
+      ],
+      [
+       "Default",
+       "Enabled",
+       "—"
+      ],
+      [
+       "Validation error",
+       "Enabled",
+       "Below field"
+      ],
+      [
+       "Sending",
+       "Disabled",
+       "—"
+      ]
+     ]
+    }
+   ],
+   "notes": [
+    "EAN: 18 digits, starts with 54; check-digit rule: Tech to confirm.",
+    "Privacy: address and EAN are personal data, never logged.",
+    "Refreshing keeps entered data."
+   ]
+  },
+  {
+   "key": "TBD-106",
+   "type": "Story",
+   "moscow": "Must",
+   "points": 5,
+   "title": "Energy - Supplier integration: Submit the switch order via API",
+   "description": "Send the confirmed switch to the supplier API exactly once, at the price the user saw.",
+   "depends": [
+    "TBD-105",
+    "TBD-101"
+   ],
+   "ac": [
+    {
+     "title": "Order is sent",
+     "given": "the user confirms with valid data and consent",
+     "when": "the order is submitted",
+     "then": "the order is sent to the supplier API",
+     "and": [
+      "the supplier reference is stored",
+      "consent is stored with timestamp"
+     ]
+    },
+    {
+     "title": "Price is re-checked",
+     "given": "the tariff changed since results loaded",
+     "when": "the user confirms",
+     "then": [
+      "no order is sent",
+      "the user sees the new price and confirms again"
+     ]
+    },
+    {
+     "title": "Order is sent once",
+     "given": "an order is in progress",
+     "when": "the user clicks again or refreshes",
+     "then": "no second order is sent (idempotency key per quote)"
+    },
+    {
+     "title": "No automatic retry",
+     "given": "the API does not answer within [10 s]",
+     "when": "the timeout passes",
+     "then": "the order is not resent and goes to expert fallback"
+    }
+   ],
+   "notes": [
+    "Payload: name, address, EAN codes, start date, contact. Privacy: send only these fields.",
+    "Idempotency key = quote ID + user ID."
+   ]
+  },
+  {
+   "key": "TBD-107",
+   "type": "Story",
+   "moscow": "Must",
+   "points": 3,
+   "title": "Energy - Supplier integration: Expert fallback on failed order",
+   "mock": "Scherm 3",
+   "description": "When the API rejects or times out, save the request and let a Peasy expert finish the switch.",
+   "depends": [
+    "TBD-106"
+   ],
+   "ac": [
+    {
+     "title": "Failure is handled",
+     "given": "the API rejects or times out",
+     "when": "the order fails",
+     "then": [
+      "the request is saved",
+      "the failure message is shown",
+      "a callback task is created for Ops"
+     ]
+    },
+    {
+     "title": "Callback task has context",
+     "given": "a callback task is created",
+     "when": "Ops opens it",
+     "then": "it shows the user, chosen product, error and time"
+    }
+   ],
+   "copy": [
+    [
+     "Success",
+     "Gelukt! Je overstap is aangevraagd.",
+     "",
+     ""
+    ],
+    [
+     "Failure",
+     "We konden je aanvraag nog niet doorsturen. Geen zorgen: je gegevens zijn bewaard. Een Peasy-expert belt je binnen [SLA].",
+     "",
+     ""
+    ]
+   ]
+  },
+  {
+   "key": "TBD-108",
+   "type": "Story",
+   "moscow": "Should",
+   "points": 3,
+   "title": "Energy - Supplier integration: Track order status and notify",
+   "description": "Store each order's status, email the customer on changes and report switches and failures.",
+   "depends": [
+    "TBD-106"
+   ],
+   "ac": [
+    {
+     "title": "Status is stored",
+     "given": "an order is sent",
+     "when": "the supplier responds",
+     "then": "status is saved as sent, accepted, rejected or failed with timestamp"
+    },
+    {
+     "title": "Customer is emailed",
+     "given": "the status changes to accepted or rejected",
+     "when": "the update is stored",
+     "then": "the customer gets the matching email"
+    },
+    {
+     "title": "Events are tracked",
+     "given": "an order changes status",
+     "when": "the event fires",
+     "then": "it is sent to [analytics tool] with supplier_id, order_id, status"
+    }
+   ],
+   "notes": [
+    "Events: supplier_result_shown, switch_order_sent, switch_order_accepted, switch_order_failed, supplier_hidden_stale.",
+    "Status via callback or polling: Tech to confirm.",
+    "Privacy: emails use existing customer templates; no EAN in email body."
+   ]
+  },
+  {
+   "key": "TBD-109",
+   "type": "Task",
+   "moscow": "Must",
+   "title": "Energy - Supplier integration: Design result, review and confirmation screens",
+   "description": "Design the result card, review and confirmation screens, including stale, validation and API-failure states. Needed before TBD-103 and TBD-105.",
+   "mock": "Scherm 1",
+   "briefing": "TBD"
+  }
+ ],
+ "grooming": {
+  "questions": [
+   [
+    "Which supplier, and is the contract signed?",
+    "Product",
+    "TBD",
+    "All"
+   ],
+   [
+    "API: order status callbacks, SLA, rate limit, sandbox?",
+    "Tech",
+    "TBD",
+    "TBD-101, TBD-106, TBD-108"
+   ],
+   [
+    "Stale threshold, retry count, alert channel?",
+    "Tech + Ops",
+    "TBD",
+    "TBD-101, TBD-104"
+   ],
+   [
+    "Callback SLA and Ops capacity for failed orders?",
+    "Ops",
+    "TBD",
+    "TBD-107"
+   ],
+   [
+    "Consent text, privacy notice, data agreement, ranking disclosure?",
+    "Legal",
+    "TBD",
+    "TBD-103, TBD-105, TBD-106"
+   ],
+   [
+    "Is EN copy needed on peasy.be, or NL/FR only?",
+    "Product",
+    "TBD",
+    ""
+   ]
+  ],
+  "assumptions": [
+   "API covers all regions and grid operators, electricity and gas.",
+   "API accepts orders with EAN, address, start date and returns a reference.",
+   "Old-contract cancellation works as for current suppliers."
+  ],
+  "decisions": [
+   [
+    "Tariff source",
+    "Supplier API, daily",
+    "Product",
+    "2026-11-04"
+   ],
+   [
+    "Switch hand-over",
+    "API order + expert fallback",
+    "Product",
+    "2026-11-04"
+   ],
+   [
+    "Regions",
+    "Flanders, Wallonia, Brussels",
+    "Product",
+    "2026-11-04"
+   ],
+   [
+    "Brands",
+    "Peasy only",
+    "Product",
+    "2026-11-04"
+   ],
+   [
+    "Ranking",
+    "Neutral, by price",
+    "Product",
+    "2026-11-04"
+   ],
+   [
+    "Stale data",
+    "Hide + alert Ops",
+    "Product",
+    "2026-11-04"
+   ]
+  ],
+  "risks": [
+   [
+    "Supplier API unreliable",
+    "Medium",
+    "High",
+    "Expert fallback, kill switch, alerting"
+   ],
+   [
+    "Price mismatch complaints",
+    "Medium",
+    "High",
+    "Price re-check at submit, stale hiding"
+   ],
+   [
+    "Duplicate switch orders",
+    "Low",
+    "High",
+    "Idempotency key, no auto-retry"
+   ],
+   [
+    "Old contract not cancelled",
+    "Low",
+    "Medium",
+    "Verify existing cancellation flow (A3)"
+   ],
+   [
+    "FR copy late, blocks release",
+    "Medium",
+    "Medium",
+    "Start translation after copy freeze"
+   ]
+  ],
+  "rollout": [
+   "Phase 0: sandbox + contract tests, internal QA",
+   "Phase 1: flag on for 10% of Flanders traffic; go/no-go on API success ≥ [X]%",
+   "Phase 2: all regions, 100%",
+   "Option: ship tariffs + expert-handled switch first, API order second (lower risk)",
+   "Before launch: support FAQ, Ops runbook, internal comms"
+  ],
+  "dod": [
+   "All ACs pass in QA on staging",
+   "Contract tests against supplier sandbox green",
+   "NL and FR copy live; Legal sign-off on consent and ranking text",
+   "Alerts and dashboard live; runbook shared with Ops",
+   "Feature flag tested off/on"
+  ]
+ },
+ "mockup": {
+  "file": "energy-supplier-mockup.html"
+ }
+}

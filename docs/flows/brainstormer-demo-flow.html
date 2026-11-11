@@ -1,0 +1,294 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Peasy Brainstormer Demo Flow</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; phase rail on top, swimlane run-sheet in the middle, checklists below. */
+:root{
+  --bg:#FDFDFD; --surface:#FFFFFF; --sunk:#F4F5FA; --fg:#17192B; --fg2:#464755; --fg3:#6B6C78; --line:#E1E2EA;
+  --accent:#394295; --accent-soft:#E7E8F4; --blue:#66C6E2; --blue-soft:#E0F4F9; --pink:#F2A4C7; --pink-soft:#FCEDF4;
+  --cream:#F9F4EA; --ok:#00704A; --ok-soft:#E6F5EF; --warn:#7A5C00; --warn-soft:#FEF6DB; --err:#C42B21; --err-soft:#FEECEB;
+  --f-body:"Nunito","Varela Round",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12131F; --surface:#1A1C2C; --sunk:#202235; --fg:#EDEDF4; --fg2:#C3C4D2; --fg3:#9A9BAD; --line:#2E3047;
+  --accent:#A9AEE8; --accent-soft:#2A2E52; --blue:#7FD0E8; --blue-soft:#163845; --pink:#F2A4C7; --pink-soft:#3E2433;
+  --cream:#2A261E; --ok:#5FD3A6; --ok-soft:#173A2E; --warn:#F2CF5C; --warn-soft:#3A3014; --err:#FF8A80; --err-soft:#401E1C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12131F; --surface:#1A1C2C; --sunk:#202235; --fg:#EDEDF4; --fg2:#C3C4D2; --fg3:#9A9BAD; --line:#2E3047;
+  --accent:#A9AEE8; --accent-soft:#2A2E52; --blue:#7FD0E8; --blue-soft:#163845; --pink:#F2A4C7; --pink-soft:#3E2433;
+  --cream:#2A261E; --ok:#5FD3A6; --ok-soft:#173A2E; --warn:#F2CF5C; --warn-soft:#3A3014; --err:#FF8A80; --err-soft:#401E1C; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--f-body);margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:48px}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.15;margin:0;font-weight:800;text-wrap:balance}
+h2{font-size:24px;margin:0 0 6px;font-weight:800;text-wrap:balance}
+h3{font-size:17px;margin:0;font-weight:700}
+p{margin:0}
+.lede{color:var(--fg2);max-width:68ch;margin-top:10px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.sub{color:var(--fg3);font-size:15px;max-width:70ch}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+.prompt{font-family:var(--f-mono);font-size:14px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--fg);overflow-x:auto}
+
+/* phase rail */
+.phases{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+@media(max-width:820px){.phases{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:460px){.phases{grid-template-columns:1fr}}
+.phase{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.phase .when{font-size:12px;font-weight:700;color:var(--fg3);letter-spacing:.06em;text-transform:uppercase}
+.phase .bar{height:4px;border-radius:4px}
+.phase ul{margin:4px 0 0;padding-left:18px;color:var(--fg2);font-size:14px}
+
+/* swimlane */
+.lane-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface);margin-top:16px}
+table.lane{border-collapse:separate;border-spacing:0;width:100%;min-width:900px;font-size:14px}
+.lane th{position:sticky;top:0;background:var(--sunk);text-align:left;padding:12px 14px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);border-bottom:1px solid var(--line)}
+.lane td{padding:12px 14px;vertical-align:top;border-bottom:1px solid var(--line);color:var(--fg2)}
+.lane tr:last-child td{border-bottom:0}
+.lane td.step{width:150px;color:var(--fg)}
+.lane td.step b{display:block;font-size:15px}
+.lane .t{font-family:var(--f-mono);font-size:12px;color:var(--fg3)}
+.node{display:inline-block;border-radius:10px;padding:8px 10px;line-height:1.4;color:var(--fg)}
+.n-you{background:var(--pink-soft)}
+.n-brain{background:var(--accent-soft)}
+.n-design{background:var(--blue-soft)}
+.n-out{background:var(--ok-soft)}
+.dec{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:2px 8px}
+.lane tr.gate td{background:var(--cream)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font-size:13px;color:var(--fg3)}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+
+/* two col cards */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.check li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;align-items:start;font-size:15px;color:var(--fg2)}
+.check input{margin:4px 0 0;width:16px;height:16px;accent-color:var(--accent)}
+.check label{cursor:pointer}
+.check b{color:var(--fg)}
+.owner{font-size:12px;font-weight:700;color:var(--fg3);margin-left:4px}
+
+/* answers table */
+.tbl-scroll{overflow-x:auto;margin-top:16px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table.ans{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+.ans th,.ans td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.ans th{background:var(--sunk);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg2)}
+.ans tr:last-child td{border-bottom:0}
+.ans td:first-child{color:var(--fg3);width:34%}
+.ans td:nth-child(2){color:var(--fg);font-weight:600}
+.sev{font-size:12px;font-weight:700;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.sev.h{background:var(--err-soft);color:var(--err)} .sev.m{background:var(--warn-soft);color:var(--warn)} .sev.l{background:var(--ok-soft);color:var(--ok)}
+
+.timebar{display:flex;height:34px;border-radius:10px;overflow:hidden;margin-top:16px;border:1px solid var(--line);font-size:12px;font-weight:700}
+.timebar div{display:flex;align-items:center;justify-content:center;color:var(--fg);white-space:nowrap;overflow:hidden;padding:0 4px;min-width:0}
+.timescale{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;color:var(--fg3);margin-top:4px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">KeyValue × Peasy · Skill demo</div>
+  <h1>peasy-brainstormer, end to end</h1>
+  <p class="lede">From a one-line feature idea to a groomable Jira ticket with an on-brand mockup. This page covers prep, rehearsal, the live run step by step, and what to do when something breaks.</p>
+
+  <div class="phases">
+    <div class="phase"><div class="bar" style="background:var(--fg3)"></div><span class="when">Today</span><h3>1 · Harden &amp; publish</h3><ul><li>Apply v0.2 skill fixes</li><li>Push repo to GitHub</li><li>Install on demo account</li></ul></div>
+    <div class="phase"><div class="bar" style="background:var(--blue)"></div><span class="when">Today, later</span><h3>2 · Rehearse</h3><ul><li>Clean-session run of Option A</li><li>Time each step</li><li>Save outputs as backup</li></ul></div>
+    <div class="phase"><div class="bar" style="background:var(--accent)"></div><span class="when">Demo day</span><h3>3 · Live run</h3><ul><li>~12 min scripted flow</li><li>Option B held for Q&amp;A</li></ul></div>
+    <div class="phase"><div class="bar" style="background:var(--pink)"></div><span class="when">After</span><h3>4 · Follow up</h3><ul><li>Share ticket + mockup links</li><li>Collect feedback for v0.3</li></ul></div>
+  </div>
+</header>
+
+<section>
+  <div class="eyebrow">Phase 3 · Live run</div>
+  <h2>Run sheet</h2>
+  <p class="sub">Who does what, in order. Cream rows are gates where the presenter makes a choice; the answers to give are in the next section.</p>
+  <div class="legend">
+    <span style="--c:var(--pink-soft)">Presenter</span>
+    <span style="--c:var(--accent-soft)">peasy-brainstormer</span>
+    <span style="--c:var(--blue-soft)">peasy-design</span>
+    <span style="--c:var(--ok-soft)">Output</span>
+  </div>
+  <div class="lane-scroll">
+  <table class="lane">
+    <thead><tr><th>Step</th><th>Presenter</th><th>peasy-brainstormer</th><th>peasy-design</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td class="step"><b>0 · Set the scene</b><span class="t">0:00 – 1:00</span></td>
+        <td><span class="node n-you">Explain the pain: ideas arrive as one line, PMs spend hours turning them into tickets and chasing design.</span></td><td></td><td></td><td></td></tr>
+      <tr><td class="step"><b>1 · Prompt</b><span class="t">1:00 – 1:30</span></td>
+        <td><span class="node n-you">Paste the prompt (below). Explicit skill name avoids peasy-design triggering instead.</span></td>
+        <td><span class="node n-brain">Loads skill, classifies as <b>A · Identity &amp; login</b>, reads question bank.</span></td><td></td><td></td></tr>
+      <tr class="gate"><td class="step"><b>2 · Round 1: scope</b><span class="t">1:30 – 3:00</span></td>
+        <td><span class="node n-you">Click answers. Narrate why each question matters (itsme, linking, GDPR).</span><br><span class="dec">Gate: 4 scope answers</span></td>
+        <td><span class="node n-brain">Asks 4 multiple-choice questions, Belgian defaults marked Recommended.</span></td><td></td><td></td></tr>
+      <tr class="gate"><td class="step"><b>3 · Round 2: details</b><span class="t">3:00 – 4:00</span></td>
+        <td><span class="node n-you">Answer, or say "use recommended defaults" to keep pace.</span><br><span class="dec">Optional: skip</span></td>
+        <td><span class="node n-brain">Only asks what round 1 left open. Leftovers go to Open questions, never a round 3.</span></td><td></td><td></td></tr>
+      <tr class="gate"><td class="step"><b>4 · Brief playback</b><span class="t">4:00 – 4:45</span></td>
+        <td><span class="node n-you">Read it aloud, confirm.</span><br><span class="dec">Gate: confirm / correct</span></td>
+        <td><span class="node n-brain">≤10-line brief: problem, users, v1 scope, out of scope, decisions.</span></td><td></td><td></td></tr>
+      <tr class="gate"><td class="step"><b>5 · Design?</b><span class="t">4:45 – 5:00</span></td>
+        <td><span class="node n-you">Choose "Yes, key screens".</span><br><span class="dec">Gate: Yes / one screen / No</span></td>
+        <td><span class="node n-brain">Builds design brief: 3 screens, nl-BE, Voorbeelddata, € XX.</span></td><td></td><td></td></tr>
+      <tr><td class="step"><b>6 · Mockup</b><span class="t">5:00 – 9:00</span></td>
+        <td><span class="node n-you">Fill the wait: show the question bank and ticket format files, explain progressive disclosure.</span></td>
+        <td><span class="node n-brain">Invokes peasy-design via the Skill tool.</span></td>
+        <td><span class="node n-design">Reads Peasy Design System artifact, builds login, itsme consent + pre-fill, and linked-account screens.</span></td>
+        <td><span class="node n-out">Mockup (Design artifact link or HTML file)</span></td></tr>
+      <tr><td class="step"><b>7 · Ticket</b><span class="t">9:00 – 10:30</span></td>
+        <td></td>
+        <td><span class="node n-brain">Fills ticket template: epic, 5 stories, Given/When/Then, nl-BE copy, GDPR, open questions, mockup linked.</span></td><td></td>
+        <td><span class="node n-out">Jira-style HTML ticket, published as an artifact</span></td></tr>
+      <tr><td class="step"><b>8 · Walkthrough</b><span class="t">10:30 – 12:30</span></td>
+        <td><span class="node n-you">Open ticket. Point at Decisions made (audit trail), one story's error criteria, Open questions with owners, the mockup link.</span></td>
+        <td><span class="node n-brain">3–5 line hand-over: links + top open questions.</span></td><td></td><td></td></tr>
+      <tr><td class="step"><b>9 · Q&amp;A</b><span class="t">12:30 →</span></td>
+        <td><span class="node n-you">If asked "does it work for other features?", run Option B prompt live up to round 1.</span></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="timebar" role="img" aria-label="Time split: intro 1 minute, questions 3.75 minutes, mockup 4 minutes, ticket 1.5 minutes, walkthrough 2 minutes">
+    <div style="flex:1;background:var(--sunk)">Intro</div>
+    <div style="flex:3.75;background:var(--accent-soft)">Questions + brief</div>
+    <div style="flex:4;background:var(--blue-soft)">Mockup</div>
+    <div style="flex:1.5;background:var(--ok-soft)">Ticket</div>
+    <div style="flex:2;background:var(--pink-soft)">Walkthrough</div>
+  </div>
+  <div class="timescale"><span>0:00</span><span>~6:00</span><span>~12:30</span></div>
+</section>
+
+<section>
+  <div class="eyebrow">Script</div>
+  <h2>Prompts and pre-decided answers</h2>
+  <p class="sub">Decide answers before going on stage so the flow stays tight. If the skill phrases a question differently, pick the closest match.</p>
+
+  <div class="grid2">
+    <div class="box">
+      <h3>Main · Option A: SSO login</h3>
+      <div class="prompt">Use peasy-brainstormer. We want SSO login for Peasy. Today users log in with just email and password.</div>
+    </div>
+    <div class="box">
+      <h3>Backup · Option B: new provider</h3>
+      <div class="prompt">Use peasy-brainstormer. We want to add a new energy supplier to the Peasy comparison.</div>
+    </div>
+  </div>
+
+  <div class="tbl-scroll">
+  <table class="ans">
+    <thead><tr><th>Question (Option A)</th><th>Answer</th><th>Talking point</th></tr></thead>
+    <tbody>
+      <tr><td>Which providers in v1?</td><td>itsme, Google, Apple</td><td>itsme is what Belgians use for banking and government</td></tr>
+      <tr><td>Existing email accounts?</td><td>Auto-link on verified matching email</td><td>Avoids duplicate accounts and lost comparisons</td></tr>
+      <tr><td>Pre-fill profile from itsme?</td><td>Yes: name, address, date of birth</td><td>Insurance and mortgage quotes need exactly these</td></tr>
+      <tr><td>Sister brands?</td><td>Peasy only for v1</td><td>Shows scoping; lands in Out of scope + Open questions</td></tr>
+      <tr><td>Keep email + password?</td><td>Keep as fallback</td><td></td></tr>
+      <tr><td>Web or app?</td><td>Web first</td><td></td></tr>
+      <tr><td>Design?</td><td>Yes, key screens</td><td>Hand-off to a second skill</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="tbl-scroll">
+  <table class="ans">
+    <thead><tr><th>Question (Option B)</th><th>Answer</th><th>Talking point</th></tr></thead>
+    <tbody>
+      <tr><td>Vertical?</td><td>Energy</td><td>Regions differ: VREG, CWaPE, BRUGEL</td></tr>
+      <tr><td>Data source?</td><td>Provider API</td><td></td></tr>
+      <tr><td>Refresh frequency?</td><td>Daily</td><td>Stale-data behaviour becomes a story</td></tr>
+      <tr><td>Switch hand-over?</td><td>API order</td><td></td></tr>
+      <tr><td>Ranking / commission?</td><td>Neutral by price</td><td>Skill refuses to invent commission %; goes to Open questions</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Phases 1–2</div>
+  <h2>Checklists</h2>
+  <p class="sub">Tick as you go. Ticks stay in this browser only.</p>
+  <div class="grid2">
+    <div class="box">
+      <h3>1 · Harden the skill (v0.2)</h3>
+      <ul class="check" data-group="fix">
+        <li><input type="checkbox" id="f1"><label for="f1"><b>Sharpen description</b> so "brainstorm / ticket / spec" picks brainstormer over peasy-design <span class="owner">Claude</span></label></li>
+        <li><input type="checkbox" id="f2"><label for="f2"><b>Plain-text fallback</b> when the clickable question tool isn't available <span class="owner">Claude</span></label></li>
+        <li><input type="checkbox" id="f3"><label for="f3"><b>Mockup attachment:</b> always link; embed only a standalone HTML file <span class="owner">Claude</span></label></li>
+        <li><input type="checkbox" id="f4"><label for="f4"><b>Quick mode:</b> one round of 3 questions when asked to keep it short <span class="owner">Claude</span></label></li>
+        <li><input type="checkbox" id="f5"><label for="f5"><b>Bump version</b> to 0.2.0 in both manifests <span class="owner">Claude</span></label></li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>1 · Publish &amp; install</h3>
+      <ul class="check">
+        <li><input type="checkbox" id="p1"><label for="p1"><b>Push repo</b> to GitHub (KeyValue org, readable by demo account) <span class="owner">Sidharth</span></label></li>
+        <li><input type="checkbox" id="p2"><label for="p2"><b>Add marketplace</b> on demo account: Customize → Add plugin → Add from repository → Sync <span class="owner">Sidharth</span></label></li>
+        <li><input type="checkbox" id="p3"><label for="p3"><b>peasy-design enabled</b> on the same account <span class="owner">Sidharth</span></label></li>
+        <li><input type="checkbox" id="p4"><label for="p4"><b>Design System artifact</b> opens from the demo account <span class="owner">Sidharth</span></label></li>
+        <li><input type="checkbox" id="p5"><label for="p5"><b>Same app</b> as demo day (Cowork desktop or claude.ai), Opus selected <span class="owner">Sidharth</span></label></li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>2 · Rehearsal</h3>
+      <ul class="check">
+        <li><input type="checkbox" id="r1"><label for="r1"><b>New session</b>, run Option A with the scripted answers</label></li>
+        <li><input type="checkbox" id="r2"><label for="r2"><b>Time each step</b>; if mockup &gt; 5 min, switch to "one screen only"</label></li>
+        <li><input type="checkbox" id="r3"><label for="r3"><b>Check the ticket:</b> no invented prices, partners or legal text; mockup link works</label></li>
+        <li><input type="checkbox" id="r4"><label for="r4"><b>Run Option B</b> to round 1 once, to confirm classification</label></li>
+        <li><input type="checkbox" id="r5"><label for="r5"><b>Save backups:</b> ticket + mockup links, screen recording of the full run</label></li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>3 · Before going live</h3>
+      <ul class="check">
+        <li><input type="checkbox" id="d1"><label for="d1"><b>Fresh session</b> open, prompt ready to paste</label></li>
+        <li><input type="checkbox" id="d2"><label for="d2"><b>Backup tabs</b> open: rehearsal ticket, mockup, recording</label></li>
+        <li><input type="checkbox" id="d3"><label for="d3"><b>Repo open</b> on SKILL.md for the "how it works" moment</label></li>
+        <li><input type="checkbox" id="d4"><label for="d4"><b>Notifications off</b>, zoom up for readability</label></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Contingency</div>
+  <h2>If something breaks</h2>
+  <div class="tbl-scroll">
+  <table class="ans">
+    <thead><tr><th>What happens</th><th>Do this</th><th>Risk</th></tr></thead>
+    <tbody>
+      <tr><td>peasy-design answers instead of the brainstormer</td><td>Stop, re-send with "Use peasy-brainstormer" at the start</td><td><span class="sev m">Medium</span></td></tr>
+      <tr><td>Questions arrive as plain text, not buttons</td><td>Answer in one message: "1: itsme, Google, Apple · 2: auto-link · …"</td><td><span class="sev l">Low</span></td></tr>
+      <tr><td>Too many questions, demo dragging</td><td>"Use the recommended defaults and go to the brief"</td><td><span class="sev l">Low</span></td></tr>
+      <tr><td>Mockup step slow (&gt;5 min)</td><td>Keep talking over the wait; if still running at 7 min, open the rehearsal mockup and continue</td><td><span class="sev h">High</span></td></tr>
+      <tr><td>Design System artifact can't be read</td><td>Mockup will look off-brand: say so, show rehearsal mockup instead</td><td><span class="sev m">Medium</span></td></tr>
+      <tr><td>Mockup doesn't show inside the ticket</td><td>Expected for artifact links: click the link in Attachments</td><td><span class="sev l">Low</span></td></tr>
+      <tr><td>Network or app failure</td><td>Switch to the screen recording, narrate over it</td><td><span class="sev h">High</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var KEY='pb-demo-checks';
+  var state={};
+  try{state=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  document.querySelectorAll('.check input[type=checkbox]').forEach(function(cb){
+    if(state[cb.id])cb.checked=true;
+    cb.addEventListener('change',function(){
+      state[cb.id]=cb.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}
+    });
+  });
+})();
+</script>
+
+</body></html>

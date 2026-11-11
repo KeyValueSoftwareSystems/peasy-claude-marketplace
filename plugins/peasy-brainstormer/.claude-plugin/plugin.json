@@ -1,0 +1,5 @@
+{
+  "name": "peasy-brainstormer",
+  "description": "Turns a rough Peasy feature idea into a Jira-style PRD: asks Belgian-context clarifying questions, optionally generates a mockup via peasy-design, outputs an epic with child stories in Peasy's Jira structure as one HTML page with the mockup embedded.",
+  "version": "0.5.0"
+}

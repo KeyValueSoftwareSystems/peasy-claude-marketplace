@@ -1,0 +1,9 @@
+<!-- @dsCard group="Cards" height=280 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ContactOption</title>
+<style>body{margin:0;padding:20px;background:var(--page-bg);font-family:var(--font-sans);color:var(--dark-500)}</style></head>
+<body><div id="root"></div>
+<script>
+var P=window.Peasy,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,h('div',{style:{display:'grid',gap:16}},h(P.ContactOption,{icon:'PhoneCall',title:'Bellen',text:'We zijn het beste bereikbaar op weekdagen tussen 09:00u en 17:00u'}),h(P.ContactOption,{icon:'PhoneTransfer',title:'Terugbellen',text:'Wij bellen je wanneer het jou uitkomt'}),h(P.ContactOption,{icon:'CalendarDots',title:'Afspraak maken',text:'Voor je hypotheek, op kantoor of via video'}))));
+</script></body></html>

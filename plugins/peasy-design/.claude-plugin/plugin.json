@@ -1,0 +1,5 @@
+{
+  "name": "peasy-design",
+  "description": "Design, write and review anything for Peasy (Belgian household fixed-costs comparison). Enforces the Peasy Design System: tokens, components, voice (NL first, FR required) and accessibility. Ships a full offline copy of the design system and a self-contained mockup starter.",
+  "version": "1.1.0"
+}

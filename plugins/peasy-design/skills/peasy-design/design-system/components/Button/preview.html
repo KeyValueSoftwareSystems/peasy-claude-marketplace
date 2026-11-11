@@ -1,0 +1,9 @@
+<!-- @dsCard group="Actions" height=180 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Button</title>
+<style>body{margin:0;padding:20px;background:var(--page-bg);font-family:var(--font-sans);color:var(--dark-500)}</style></head>
+<body><div id="root"></div>
+<script>
+var P=window.Peasy,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,h('div',{style:{display:'flex',gap:16,flexWrap:'wrap',alignItems:'center'}},h(P.Button,null,'Bespaar nu'),h(P.Button,{iconBack:true},'Start met vergelijken'),h(P.Button,{form:'outline'},'Mijn Peasy'),h(P.Button,{size:'M'},'Vergelijk'),h(P.Button,{size:'S'},'Kies'),h(P.Button,{disabled:true},'Bestel nu')),h('div',{style:{display:'flex',gap:16,marginTop:16,padding:16,background:'var(--secondary-500)',borderRadius:16}},h(P.Button,{form:'outline',surface:'dark'},'Lees meer'),h(P.TextLink,{surface:'dark'},'Bekijk alle providers'))));
+</script></body></html>

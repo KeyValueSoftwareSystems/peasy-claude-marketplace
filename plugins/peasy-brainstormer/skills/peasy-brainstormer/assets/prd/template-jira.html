@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Issue</title>
+<script>(function(){if(/[?&]debug\b/.test(location.search))return;addEventListener('error',function(e){e.preventDefault()},true);addEventListener('unhandledrejection',function(e){e.preventDefault()});})();</script>
+<style>
+:root{
+  --text:#172B4D;--text2:#44546F;--text3:#626F86;--text4:#8590A2;--line:#DCDFE4;--line2:#EBECF0;--bg:#FFFFFF;--bg2:#F7F8F9;--hover:#F1F2F4;
+  --brand:#0C66E4;--brand-h:#0055CC;--link:#0C66E4;--sel:#E9F2FF;
+  --lz-grey:#DCDFE4;--lz-grey-t:#44546F;--lz-blue:#CCE0FF;--lz-blue-t:#0055CC;--lz-green:#BAF3DB;--lz-green-t:#216E4E;
+  --epic:#8F7EE7;--story:#6A9A23;--task:#1D7AFC;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans",Ubuntu,"Helvetica Neue",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}html{scroll-padding-top:16px}
+body{font:14px/20px var(--font);color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+/* sidebar = PRD navigation */
+.av{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font:600 10px var(--font);color:#fff;background:#6554C0;flex:none}
+.av.lg{width:32px;height:32px;font-size:12px}.av.un{background:#DFE1E6;color:#626F86}
+.ib{width:32px;height:32px;border:0;background:none;border-radius:4px;display:grid;place-items:center;color:var(--text2)}.ib:hover{background:var(--hover)}
+.side{position:fixed;top:0;bottom:0;left:0;width:272px;background:var(--bg2);border-right:1px solid var(--line);padding:16px 8px 32px;overflow:auto}
+.side .hd{padding:4px 8px 14px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.side .hd small{display:block;font:700 11px var(--font);color:var(--text3);text-transform:uppercase;letter-spacing:.02em}
+.side .hd b{display:block;font-size:14px;line-height:18px;margin-top:2px}
+.side h6{margin:14px 8px 6px;font:700 11px var(--font);color:var(--text3);text-transform:uppercase;letter-spacing:.02em}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:3px;color:var(--text2);font-weight:500;line-height:18px}
+.side a:hover{background:var(--hover);text-decoration:none}
+.side a .k{font:500 12px var(--font);color:var(--text3);white-space:nowrap}
+.side a .t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.side a svg{flex:none;margin-top:1px}
+.side a.cur{background:var(--sel);color:var(--brand)}.side a.cur .k{color:var(--brand)}
+.side .secs{margin:2px 0 6px 20px;border-left:2px solid var(--line);padding-left:4px}
+.side .secs a{padding:4px 8px;font-weight:400;font-size:13px;color:var(--text3)}
+.side .secs a.l2{padding-left:20px;font-size:12.5px}
+.side .secs a.on{color:var(--brand);font-weight:600;background:none;box-shadow:inset 2px 0 0 var(--brand);margin-left:-6px;padding-left:14px}
+.side .secs a.l2.on{padding-left:26px}
+.side .st{margin-left:auto;flex:none}
+/* issue */
+.main{margin:0 0 0 272px;min-height:100vh}
+.issue{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px;max-width:1440px;padding:20px 32px 80px 40px}
+.crumbs{display:flex;align-items:center;gap:6px;color:var(--text3);font-size:14px;margin-bottom:12px;flex-wrap:wrap}.crumbs a{color:var(--text3)}.crumbs .sep{color:var(--text4)}
+.crumbs .k{display:inline-flex;gap:6px;align-items:center}
+h1.sum{font-size:24px;line-height:28px;font-weight:500;margin:0 0 16px;letter-spacing:-.01em}
+.tools{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.tb{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;background:#F1F2F4;border:0;border-radius:3px;color:var(--text2);font-weight:500}.tb:hover{background:#DCDFE4}
+.field-h{font-size:16px;font-weight:600;margin:24px 0 8px}
+.desc{border-radius:3px;padding:2px 0}
+.desc h2{font-size:20px;line-height:24px;font-weight:600;margin:24px 0 8px}.desc h2:first-child{margin-top:4px}
+.desc h3{font-size:16px;font-weight:600;margin:20px 0 6px}
+.desc h4{font-size:14px;font-weight:600;margin:16px 0 4px}
+.desc p{margin:0 0 10px}.desc ul{margin:4px 0 10px;padding-left:24px}.desc li{margin:2px 0}
+.desc table{border-collapse:collapse;width:100%;margin:8px 0 12px;font-size:14px}
+.desc th,.desc td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}.desc th{background:var(--bg2);font-weight:600}
+.desc .kv th{width:34%}
+.desc code{font:12px var(--mono);background:var(--hover);padding:1px 4px;border-radius:3px}
+.gwt{margin:0 0 12px}.gwt div{margin:0 0 2px}.gwt b{font-weight:600}
+.panel{background:#FFFAE6;border-left:3px solid #FFAB00;padding:8px 12px;margin:8px 0 12px;border-radius:3px}
+.panel.info{background:#E9F2FF;border-color:#1D7AFC}
+.inline-tbd{color:var(--text4);font-style:italic}
+
+/* child issues */
+.ch-head{display:flex;align-items:center;gap:8px;margin:28px 0 8px}.ch-head .field-h{margin:0}.ch-head .sp{flex:1}
+.prog{display:flex;align-items:center;gap:10px;margin:0 0 8px;color:var(--text3);font-size:12px}
+.prog .bar{flex:1;height:8px;border-radius:4px;background:var(--line2);overflow:hidden;display:flex}.prog .bar i{display:block;height:100%}
+.list{border:1px solid var(--line);border-radius:3px}
+.row{display:grid;grid-template-columns:20px 96px minmax(0,1fr) 20px 28px 110px;gap:10px;align-items:center;padding:7px 10px;border-top:1px solid var(--line);cursor:pointer}
+.row:first-child{border-top:0}.row:hover{background:var(--hover)}
+.row .key{color:var(--link);font-weight:500;font-size:13px}.row .s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .st{justify-self:end}
+.lz{display:inline-block;font:700 11px/16px var(--font);text-transform:uppercase;padding:0 4px;border-radius:3px;background:var(--lz-grey);color:var(--lz-grey-t);white-space:nowrap}
+.linked{border:1px solid var(--line);border-radius:3px}.linked .lh{padding:6px 10px;font-size:12px;font-weight:600;color:var(--text3);background:var(--bg2);border-bottom:1px solid var(--line)}
+
+/* attachments */
+.atts{display:flex;gap:12px;flex-wrap:wrap}
+.att{width:200px;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--bg);cursor:pointer;text-align:left;padding:0}
+.att:hover{box-shadow:0 4px 8px -2px rgba(9,30,66,.25)}
+.att .th{height:112px;background:linear-gradient(135deg,#65C3E2,#3B4A9B);display:grid;place-items:center;color:#fff;font:700 22px var(--font);letter-spacing:.04em}
+.att .th small{display:block;font:500 11px var(--font);opacity:.9;letter-spacing:0;text-align:center}
+.att .nm{padding:8px 10px;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.att .sz{padding:0 10px 8px;font-size:11px;color:var(--text3)}
+
+/* activity */
+.act-tabs{display:flex;gap:4px;align-items:center;margin:0 0 12px;color:var(--text3);font-size:12px}
+.act-tabs button{border:0;background:var(--hover);padding:4px 10px;border-radius:3px;font-weight:500;color:var(--text2)}.act-tabs button.on{background:var(--sel);color:var(--brand)}
+.cbox{display:flex;gap:10px;margin-bottom:16px}.cbox .in{flex:1;border:1px solid var(--line);border-radius:3px;padding:8px 10px;color:var(--text4)}
+.tip{font-size:12px;color:var(--text3);margin:-10px 0 16px 42px}.tip kbd{font:600 11px var(--font);background:var(--hover);border:1px solid var(--line);border-radius:3px;padding:0 4px}
+.cm{display:flex;gap:10px;margin:0 0 18px}.cm .b{flex:1;min-width:0}.cm .who{font-weight:600;margin-right:8px}.cm .when{color:var(--text3);font-size:12px}
+.cm .txt{margin-top:4px}.cm .txt ul{margin:4px 0;padding-left:20px}.cm .txt table{border-collapse:collapse;width:100%;font-size:13px;margin:6px 0}.cm .txt td,.cm .txt th{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}.cm .txt th{background:var(--bg2)}
+.cm .ops{font-size:12px;color:var(--text3);margin-top:4px}.cm .ops span{margin-right:12px;font-weight:500}
+.hist{font-size:13px;color:var(--text2)}.hist div{padding:6px 0;border-bottom:1px solid var(--line2)}
+
+/* right column */
+.right{position:sticky;top:20px;align-self:start}
+.st-row{display:flex;gap:8px;align-items:center;margin-bottom:16px}
+.stbtn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border:0;border-radius:3px;background:var(--lz-grey);color:var(--text);font-weight:600;font-size:13px}
+.stbtn:hover{background:#C7CBD1}
+.box{border:1px solid var(--line);border-radius:4px;margin-bottom:12px}
+.box>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;font-weight:600;cursor:pointer;border-bottom:1px solid var(--line)}
+.box>summary::-webkit-details-marker{display:none}.box:not([open])>summary{border-bottom:0}
+.box>summary svg{transition:transform .15s}.box:not([open])>summary svg{transform:rotate(-90deg)}
+.dl{padding:4px 12px 10px}
+.dr{display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px;padding:6px 0;align-items:start}
+.dr dt{color:var(--text3);font-weight:600;font-size:13px;padding-top:2px}.dr dd{margin:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:24px}
+.lbl{display:inline-block;background:var(--hover);border-radius:3px;padding:0 6px;font-size:12px;line-height:20px;color:var(--text)}
+.none{color:var(--text3)}
+.meta{font-size:12px;color:var(--text3);padding:4px 2px}.meta div{margin-bottom:2px}
+.dor{padding:8px 12px 12px;font-size:13px}.dor .n{font-weight:600}.dor ul{margin:6px 0 0;padding-left:18px}.dor li{margin:2px 0}
+
+/* modal (attachment viewer) */
+.modal{position:fixed;inset:0;background:rgba(9,30,66,.97);z-index:50;display:none;flex-direction:column}
+.modal.on{display:flex}
+.mbar{height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;color:#fff}
+.mbar .nm{font-weight:600}.mbar .sp{flex:1}
+.mbar button{background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:3px;height:32px;padding:0 12px;font-weight:500}.mbar button:hover{background:rgba(255,255,255,.22)}
+.mbar select{height:32px;border-radius:3px;border:0;padding:0 8px;font:inherit}
+.modal iframe{flex:1;border:0;background:#fff;margin:0 16px 16px;border-radius:3px}
+.toast{position:fixed;left:24px;bottom:24px;background:#172B4D;color:#fff;padding:10px 14px;border-radius:3px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;box-shadow:0 8px 12px rgba(9,30,66,.15)}
+.toast.on{opacity:1}
+
+@media (max-width:1100px){.issue{grid-template-columns:1fr}.right{position:static;order:-1}}
+@media (max-width:800px){.side{display:none}.main{margin-left:0}.issue{padding:16px}
+ .row{grid-template-columns:20px 84px minmax(0,1fr) 90px}.row .pri,.row .av{display:none}.dr{grid-template-columns:110px 1fr}}
+</style>
+</head>
+<body>
+
+
+<aside class="side" id="side" aria-label="PRD navigation"></aside>
+
+<main class="main"><div class="issue" id="issue"></div></main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Attachment preview">
+  <div class="mbar"><span class="nm" id="m-name"></span><span class="sp"></span>
+    <select id="m-screen" aria-label="Screen"></select>
+    <button id="m-close">Close</button></div>
+  <iframe id="mock-frame" title="Mockup"></iframe>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script id="prd-data" type="application/json">
+__PRD_JSON__
+</script>
+<script id="mockup-embed" type="text/plain">__MOCKUP_B64__</script>
+
+<script>
+(function(){
+const D=JSON.parse(document.getElementById('prd-data').textContent),E=D.epic,F=E.fields,G=D.grooming||{},$=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const isTbd=v=>!v||/^TBD$/i.test(String(v).trim());
+const ul=a=>`<ul>${(a||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+const lnk=(u,t)=>isTbd(u)?`<span class="inline-tbd">${esc(t)}: TBD</span>`:`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`;
+const ini=n=>isTbd(n)?'':String(n).split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const avatar=(n,cls='')=>isTbd(n)?`<span class="av un ${cls}" title="Unassigned"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>`:`<span class="av ${cls}" title="${esc(n)}">${esc(ini(n))}</span>`;
+const ICON={
+ Epic:'<svg width="16" height="16" viewBox="0 0 16 16"><rect width="16" height="16" rx="3" fill="#8F7EE7"/><path d="M9.5 3L5 9h3l-1.5 4L11 7H8z" fill="#fff"/></svg>',
+ Story:'<svg width="16" height="16" viewBox="0 0 16 16"><rect width="16" height="16" rx="3" fill="#6A9A23"/><path d="M5 4h6v8.5L8 10.5 5 12.5z" fill="#fff"/></svg>',
+ Task:'<svg width="16" height="16" viewBox="0 0 16 16"><rect width="16" height="16" rx="3" fill="#1D7AFC"/><path d="M4.5 8.2l2.3 2.3 4.7-5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>'};
+const PRI={Highest:'#C9372C',High:'#E2483D',Medium:'#E2B203',Low:'#1D7AFC',Lowest:'#1D7AFC'};
+const pri=p=>{p=p||'Medium';const c=PRI[p]||PRI.Medium;const shape=p==='Medium'?'<path d="M3 6h10M3 10h10" stroke="'+c+'" stroke-width="2" stroke-linecap="round"/>':/High/.test(p)?'<path d="M3 10l5-4 5 4" fill="none" stroke="'+c+'" stroke-width="2" stroke-linecap="round"/>':'<path d="M3 6l5 4 5-4" fill="none" stroke="'+c+'" stroke-width="2" stroke-linecap="round"/>';return `<svg class="pri" width="16" height="16" viewBox="0 0 16 16" aria-label="${p}">${shape}</svg>`};
+const lz=s=>`<span class="lz">${esc(s||'To groom')}</span>`;
+const chev='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
+const blocks=a=>(a||[]).map(x=>`<h4>${esc(x.title)}</h4>`+(x.table?`<table><thead><tr>${x.table[0].map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${x.table.slice(1).map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`:x.items?ul(x.items):`<p>${esc(x.text)}</p>`)).join('');
+const byKey=k=>D.tickets.find(t=>t.key===k);
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)};
+document.title=`[${E.key}] ${E.title}`;
+
+/* ---------- description renderers (Jira rich text) ---------- */
+const epicDesc=()=>`
+<h2>Summary</h2><p>${esc(E.summary)}</p>${E.problem?`<div class="panel info"><b>Problem:</b> ${esc(E.problem)}</div>`:''}
+<h2>Goal &amp; Business Value</h2>${ul(E.goals)}
+${E.metrics?`<h4>Success metrics</h4><table><thead><tr><th>Metric</th><th>Baseline</th><th>Target</th></tr></thead><tbody>${E.metrics.map(m=>`<tr><td>${esc(m[0])}</td><td>${esc(m[1])}</td><td>${esc(m[2])}</td></tr>`).join('')}</tbody></table>`:''}
+<h2>People</h2><table class="kv"><tbody>${Object.entries(E.people).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${isTbd(v)?'<span class="inline-tbd">TBD</span>':esc(v)}</td></tr>`).join('')}</tbody></table>
+<h2>Scope &amp; Impact</h2><h4>Included</h4>${ul(E.scope.included)}<h4>Excluded</h4>${ul(E.scope.excluded)}
+<h2>Dependencies</h2><ul>${E.dependencies.map(x=>{const m=x.match(/^([A-Z]+-\d+)\s*(.*)$/);return `<li>${m?`<a href="#" onclick="return false">${esc(m[1])}</a> ${esc(m[2])}`:esc(x)}</li>`}).join('')}</ul>
+<h2>Design &amp; Details</h2><h4>Design</h4><p>Figma: ${lnk(E.figma,'link')}</p>${blocks(E.details)}<h4>Notes</h4>${ul(E.notes)}
+<h2>Technical Design Document</h2><p>${lnk(E.tdd,'Confluence page')}</p>`;
+const thenHtml=v=>Array.isArray(v)?`<b>Then:</b><ul>${v.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:`<div><b>Then</b> ${esc(v)}</div>`;
+const tkDesc=t=>{let h=`<p>${esc(t.description)}</p>`;
+ if(t.ac&&t.ac.length)h+=`<h2>Acceptance Criteria</h2>`+t.ac.map((a,i)=>`<h4>AC${i+1} — ${esc(a.title)}</h4><div class="gwt"><div><b>Given</b> ${esc(a.given)},</div><div><b>When</b> ${esc(a.when)},</div>${thenHtml(a.then)}${(a.and||[]).map(x=>`<div><b>And</b> ${esc(x)}</div>`).join('')}</div>`).join('');
+ if(t.copy||t.details||t.notes||t.mock){h+=`<h2>Design &amp; Details</h2><h4>Design</h4><p>Figma: ${lnk(t.figma||E.figma,'link')}</p>`;
+  if(t.copy)h+=`<h4>Copy &amp; messages</h4><table><thead><tr><th>Use</th><th>NL</th><th>FR</th><th>EN</th></tr></thead><tbody>${t.copy.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${r[2]?esc(r[2]):'<span class="inline-tbd">[FR: todo]</span>'}</td><td>${r[3]?esc(r[3]):'<span class="inline-tbd">[EN: todo]</span>'}</td></tr>`).join('')}</tbody></table>`;
+  h+=blocks(t.details);if(t.notes)h+=`<h4>Notes</h4>${ul(t.notes)}`;}
+ if(t.type==='Story')h+=`<h2>Technical Implementation Details</h2><h4>Frontend Technical Document</h4><p>${lnk(t.fe,'Confluence page')}</p><h4>Backend Technical Document</h4><p>${lnk(t.be,'Confluence page')}</p>`;
+ if(t.type==='Task')h+=`<h4>Briefing</h4><p>${lnk(t.briefing,'Design briefing')}</p>`;
+ return h;};
+
+/* ---------- readiness (shown as Jira-style panel in right column) ---------- */
+const qBlocks=(q,k)=>q[3]&&(q[3]==='All'||q[3].split(/,\s*/).includes(k));
+const gaps=t=>{const s=t.type==='Story',g=[];if(isTbd(t.figma||E.figma))g.push('Figma link');if(s&&(isTbd(t.fe)||isTbd(t.be)))g.push('Tech docs');
+ if(t.type==='Task'&&isTbd(t.briefing))g.push('Briefing');if(s&&(t.points||0)>5)g.push('Split (>5 pts)');const fr=(t.copy||[]).filter(r=>!r[2]).length;if(fr)g.push(`FR copy (${fr})`);
+ (G.questions||[]).forEach((q,i)=>{if(qBlocks(q,t.key))g.push(`Q${i+1}: ${q[0]}`)});return g;};
+
+/* ---------- activity ---------- */
+const groomComment=()=>`
+<div class="cm">${avatar('peasy brainstormer')}<div class="b"><span class="who">peasy-brainstormer</span><span class="when">${esc(F.Created)}</span>
+<div class="txt"><p><b>Grooming notes</b> (not part of the ticket description)</p>
+<b>Open questions</b><table><thead><tr><th>#</th><th>Question</th><th>Owner</th><th>Blocks</th></tr></thead><tbody>${(G.questions||[]).map((q,i)=>`<tr><td>Q${i+1}</td><td>${esc(q[0])}</td><td>${esc(q[1])}</td><td>${esc(q[3]||'—')}</td></tr>`).join('')}</tbody></table>
+<b>Risks</b>${ul((G.risks||[]).map(r=>`${r[0]} (${r[1]} / ${r[2]}): ${r[3]}`))}
+<b>Rollout</b>${ul(G.rollout)}
+<b>Assumptions</b>${ul(G.assumptions)}
+<b>Definition of Done</b>${ul(G.dod)}</div>
+<div class="ops"><span>Edit</span><span>Delete</span><span>👍</span></div></div></div>`;
+const history=t=>`<div class="hist"><div><b>${esc(F.Reporter)}</b> created the ${t?esc(t.type):'Epic'} · ${esc(F.Created)}</div>${(G.decisions||[]).map(d=>`<div><b>${esc(d[2]||'Product')}</b> decided <i>${esc(d[0])}</i> → ${esc(d[1])} · ${esc(d[3]||'')}</div>`).join('')}</div>`;
+const activity=t=>`<div class="field-h">Activity</div>
+<div class="act-tabs">Show: <button class="on" data-act="c">Comments</button><button data-act="h">History</button></div>
+<div class="cbox">${avatar(F.Reporter)}<div class="in">Add a comment…</div></div><div class="tip"><b>Pro tip:</b> press <kbd>M</kbd> to comment</div>
+<div data-pane="c">${t?`<div class="none">No comments yet.</div>`:groomComment()}</div><div data-pane="h" hidden>${history(t)}</div>`;
+
+/* ---------- right column ---------- */
+const right=t=>{const f=t?{Assignee:t.assignee,Reporter:F.Reporter,Labels:F.Labels,Priority:t.priority||F.Priority,Components:F.Components,'Fix versions':F['Fix version'],'Story point estimate':t.points,Parent:E.key}
+ :{Assignee:F.Assignee,Reporter:F.Reporter,Labels:F.Labels,Priority:F.Priority,Components:F.Components,'Fix versions':F['Fix version'],'Start date':null,'Due date':null};
+ const v=(k,x)=>{if(k==='Assignee'||k==='Reporter')return `${avatar(x)}${isTbd(x)?'<span>Unassigned</span>':`<span>${esc(x)}</span>`}`;
+  if(k==='Labels')return (x||[]).map(l=>`<span class="lbl">${esc(l)}</span>`).join('')||'<span class="none">None</span>';
+  if(k==='Priority')return `${pri(x)}<span>${esc(x)}</span>`;
+  if(k==='Components')return isTbd(x)?'<span class="none">None</span>':`<span>${String(x).split(/,\s*/).map(c=>`<a href="#" onclick="return false">${esc(c)}</a>`).join(', ')}</span>`;
+  if(k==='Parent')return `<span style="display:inline-flex;gap:6px;align-items:flex-start">${ICON.Epic}<a href="#${esc(x)}">${esc(x)} ${esc(E.title.replace(/^[^:]+:\s*/,''))}</a></span>`;
+  return x===null||x===undefined||isTbd(x)?'<span class="none">None</span>':`<span>${esc(x)}</span>`;};
+ const g=t?gaps(t):null;
+ const readyBox=t?`<details class="box" open><summary>Definition of Ready ${chev}</summary><div class="dor">${g.length?`<span class="n">${g.length} item(s) missing</span><ul>${g.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<span class="n" style="color:#216E4E">Ready for sprint</span>'}</div></details>`
+  :`<details class="box" open><summary>Definition of Ready ${chev}</summary><div class="dor"><span class="n">${D.tickets.filter(x=>!gaps(x).length).length} of ${D.tickets.length}</span> child issues ready for sprint</div></details>`;
+ return `<div class="right"><div class="st-row"><button class="stbtn" title="Change status">${esc((t?t.status:F.Status)||'To groom')} ${chev}</button><button class="ib" aria-label="Actions" style="background:#F1F2F4">⚡</button></div>
+ <details class="box" open><summary>Details ${chev}</summary><div class="dl">${Object.entries(f).map(([k,x])=>`<div class="dr"><dt>${k}</dt><dd>${v(k,x)}</dd></div>`).join('')}</div></details>
+ ${readyBox}
+ <details class="box"><summary>Development ${chev}</summary><div class="dl"><div class="dr"><dt>Branches</dt><dd class="none">Create branch</dd></div><div class="dr"><dt>Commits</dt><dd class="none">None</dd></div></div></details>
+ <div class="meta"><div>Created ${esc(F.Created)}</div><div>Updated ${esc(F.Updated)}</div></div></div>`;};
+
+/* ---------- pages ---------- */
+const childRow=t=>`<div class="row" data-go="${t.key}" tabindex="0" role="link">${ICON[t.type]}<span class="key">${esc(t.key)}</span><span class="s">${esc(t.title)}</span>${pri(t.priority||'Medium')}${avatar(t.assignee)}<span class="st">${lz(t.status)}</span></div>`;
+const att=(label,screen)=>D.mockup?`<button class="att" data-mock="${esc(screen||'')}"><div class="th"><div>HTML<small>${esc(screen||'3 screens')}</small></div></div><div class="nm">${esc(D.mockup.file||'Design artifact')}</div><div class="sz">Mockup · ${esc(label)}</div></button>`:'';
+const crumbs=t=>`<div class="crumbs"><span class="k">${ICON.Epic}<a href="#${esc(E.key)}">${esc(E.key)}</a></span>${t?`<span class="sep">/</span><span class="k">${ICON[t.type]}<a href="#${esc(t.key)}">${esc(t.key)}</a></span>`:''}</div>`;
+const tools=t=>`<div class="tools"><button class="tb" data-noop>📎 Attach</button><button class="tb" data-noop>${t?'＋ Add a subtask':'＋ Add a child issue'}</button><button class="tb" data-noop>🔗 Link issue</button><button class="tb" data-copy>⧉ Copy as Jira markup</button><button class="tb" data-noop>⋯</button></div>`;
+
+const epicPage=()=>{const n=D.tickets.length,done=D.tickets.filter(t=>/done/i.test(t.status||'')).length,ip=D.tickets.filter(t=>/progress/i.test(t.status||'')).length;
+ return `<div>${crumbs()}<h1 class="sum">${esc(E.title)}</h1>${tools()}
+ <div class="field-h">Description</div><div class="desc">${epicDesc()}</div>
+ ${D.mockup?`<div class="field-h">Attachments <span class="none" style="font-weight:400">(1)</span></div><div class="atts">${att('3 screens with state toggles')}</div>`:''}
+ <div class="ch-head"><div class="field-h">Child issues</div><span class="sp"></span><button class="ib" aria-label="Add child">＋</button></div>
+ <div class="prog"><div class="bar"><i style="width:${done/n*100}%;background:#22A06B"></i><i style="width:${ip/n*100}%;background:#1D7AFC"></i></div><span>${Math.round(done/n*100)}% Done</span></div>
+ <div class="list">${D.tickets.map(childRow).join('')}</div>
+ <div style="height:28px"></div>${activity(null)}</div>${right(null)}`;};
+
+const tkPage=t=>{const deps=(t.depends||[]).map(byKey).filter(Boolean),blocks=D.tickets.filter(x=>(x.depends||[]).includes(t.key));
+ return `<div>${crumbs(t)}<h1 class="sum">${esc(t.title)}</h1>${tools(t)}
+ <div class="field-h">Description</div><div class="desc">${tkDesc(t)}</div>
+ ${t.mock&&D.mockup?`<div class="field-h">Attachments <span class="none" style="font-weight:400">(1)</span></div><div class="atts">${att(t.mock,t.mock)}</div>`:''}
+ ${deps.length||blocks.length?`<div class="field-h">Linked work items</div><div class="linked">${deps.length?`<div class="lh">is blocked by</div>${deps.map(childRow).join('')}`:''}${blocks.length?`<div class="lh">blocks</div>${blocks.map(childRow).join('')}`:''}</div>`:''}
+ <div style="height:28px"></div>${activity(t)}</div>${right(t)}`;};
+
+
+/* ---------- left navigation (built from the rendered page) ---------- */
+let spyOff=null;
+const slug=(p,x)=>(p+'-'+x).toLowerCase().replace(/[^a-z0-9]+/g,'-');
+const buildNav=t=>{const root=$('#issue'),cur=t?t.key:E.key,secs=[];
+ root.querySelectorAll('.desc h2, .desc h4, .field-h').forEach(el=>{
+  const isAC=el.tagName==='H4'&&/^AC\d+/.test(el.textContent), lvl=el.tagName==='H4'?(isAC?2:0):1;
+  if(!lvl)return; if(el.classList.contains('field-h')&&/^Description$/.test(el.textContent.trim()))return;
+  el.id=el.id||slug(cur,el.textContent);secs.push({id:el.id,label:el.textContent.replace(/\s*\(\d+\)\s*$/,'').trim(),l2:lvl===2});});
+ const secHtml=`<div class="secs">${secs.map(x=>`<a href="#" data-sec="${x.id}" class="${x.l2?'l2':''}">${esc(x.label)}</a>`).join('')}</div>`;
+ const item=(k,type,title,status)=>`<a href="#${esc(k)}" class="${k===cur?'cur':''}">${ICON[type]}<span><span class="k">${esc(k)}</span> <span class="t">${esc(title.replace(/^[^:]+:\s*/,''))}</span></span></a>${k===cur?secHtml:''}`;
+ $('#side').innerHTML=`<div class="hd"><small>PRD</small><b>${esc(E.title.replace(/^[^:]+:\s*/,''))}</b></div>
+  <h6>Epic</h6>${item(E.key,'Epic',E.title)}
+  <h6>Child issues (${D.tickets.length})</h6>${D.tickets.map(x=>item(x.key,x.type,x.title)).join('')}`;
+ const links=[...document.querySelectorAll('.side [data-sec]')];
+ links.forEach(a=>a.onclick=e=>{e.preventDefault();document.getElementById(a.dataset.sec).scrollIntoView({behavior:'smooth',block:'start'})});
+ if(spyOff)removeEventListener('scroll',spyOff);
+ spyOff=()=>{let on=null;for(const a of links){const el=document.getElementById(a.dataset.sec);if(el&&el.getBoundingClientRect().top<120)on=a}
+  links.forEach(a=>a.classList.toggle('on',a===on));if(on){const sb=$('#side'),r=on.getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)on.scrollIntoView({block:'nearest'})}};
+ addEventListener('scroll',spyOff,{passive:true});spyOff();
+ const c=$('.side a.cur');if(c)c.scrollIntoView({block:'nearest'});};
+
+/* ---------- router ---------- */
+const route=()=>{const k=decodeURIComponent(location.hash.slice(1));const t=byKey(k);
+ $('#issue').innerHTML=t?tkPage(t):epicPage();document.title=t?`[${t.key}] ${t.title}`:`[${E.key}] ${E.title}`;scrollTo({top:0,behavior:'instant'});wire(t);buildNav(t);};
+const go=k=>{if(location.hash==='#'+k)route();else location.hash=k;};
+addEventListener('hashchange',route);
+
+/* ---------- jira markup export ---------- */
+const jl=v=>Array.isArray(v)?'\n'+v.map(x=>'* '+x).join('\n'):' '+v;
+const blkMd=a=>(a||[]).map(x=>`h4. ${x.title}\n`+(x.table?`||${x.table[0].join('||')}||\n`+x.table.slice(1).map(r=>`|${r.join('|')}|`).join('\n'):x.items?x.items.map(i=>'* '+i).join('\n'):x.text)).join('\n')+((a||[]).length?'\n':'');
+const tkMd=t=>`h2. Description\n${t.description}\n`+(t.ac?`h2. Acceptance Criteria\n`+t.ac.map((a,i)=>`h4. AC${i+1} — ${a.title}\n*Given* ${a.given},\n*When* ${a.when},\n*Then*${jl(a.then)}`+(a.and||[]).map(x=>`\n*And* ${x}`).join('')).join('\n\n')+'\n':'')+
+ (t.copy?`h2. Design & Details\n||Use||NL||FR||EN||\n`+t.copy.map(r=>`|${r[0]}|${r[1]}|${r[2]||'[FR: todo]'}|${r[3]||'[EN: todo]'}|`).join('\n')+'\n':'')+blkMd(t.details)+(t.notes?`h4. Notes\n`+t.notes.map(x=>'* '+x).join('\n')+'\n':'')+
+ (t.type==='Story'?`h2. Technical Implementation Details\nh4. Frontend Technical Document\n${t.fe||'TBD'}\nh4. Backend Technical Document\n${t.be||'TBD'}\n`:'');
+const epMd=()=>`h2. Summary\n${E.summary}${E.problem?'\n{panel}*Problem:* '+E.problem+'{panel}':''}\nh2. Goal & Business Value\n${E.goals.map(x=>'* '+x).join('\n')}${E.metrics?'\nh4. Success metrics\n||Metric||Baseline||Target||\n'+E.metrics.map(m=>`|${m.join('|')}|`).join('\n'):''}\nh2. People\n${Object.entries(E.people).map(([k,v])=>`||${k}|${v}|`).join('\n')}\nh2. Scope & Impact\nh4. Included\n${E.scope.included.map(x=>'* '+x).join('\n')}\nh4. Excluded\n${E.scope.excluded.map(x=>'* '+x).join('\n')}\nh2. Dependencies\n${E.dependencies.map(x=>'* '+x).join('\n')}\nh2. Design & Details\nh4. Design\nFigma: ${E.figma||'TBD'}\n${blkMd(E.details)}h4. Notes\n${E.notes.map(x=>'* '+x).join('\n')}\nh2. Technical Design Document\n${E.tdd||'TBD'}`;
+const copy=x=>(navigator.clipboard?navigator.clipboard.writeText(x):Promise.reject()).then(()=>toast('Copied as Jira markup'),()=>toast('Copy not allowed here'));
+
+/* ---------- mockup viewer ---------- */
+const frame=$('#mock-frame'),modal=$('#modal');
+const screens=[...new Set(D.tickets.map(t=>t.mock).filter(Boolean))].sort();
+$('#m-screen').innerHTML=`<option value="">All screens</option>`+screens.map(s=>`<option>${esc(s)}</option>`).join('');
+const jump=s=>{const n=s&&s.match(/\d+/);if(n)frame.contentWindow.postMessage({scherm:n[0]},'*');};
+const openMock=s=>{if(!D.mockup)return;if(D.mockup.url&&!$('#mockup-embed').textContent.trim()){window.open(D.mockup.url,'_blank','noopener');return;}$('#m-name').textContent=D.mockup.file||'Mockup';$('#m-screen').value=s||'';modal.classList.add('on');
+ if(!frame.dataset.loaded){frame.dataset.loaded='1';const e=$('#mockup-embed').textContent.trim();
+  if(e&&e.indexOf('__')!==0){const b=atob(e),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);frame.srcdoc=new TextDecoder('utf-8').decode(u);}else frame.src=D.mockup.file;
+  frame.addEventListener('load',()=>setTimeout(()=>jump(s),500),{once:true});}else jump(s);
+ $('#m-close').focus();};
+const closeMock=()=>modal.classList.remove('on');
+$('#m-close').onclick=closeMock;addEventListener('keydown',e=>{if(e.key==='Escape')closeMock()});
+$('#m-screen').onchange=e=>jump(e.target.value);
+
+/* ---------- wiring ---------- */
+const wire=t=>{
+ document.querySelectorAll('[data-go]').forEach(r=>{r.onclick=()=>go(r.dataset.go);r.onkeydown=e=>{if(e.key==='Enter')go(r.dataset.go)}});
+ document.querySelectorAll('[data-home]').forEach(a=>a.onclick=e=>{e.preventDefault();go(E.key)});
+ document.querySelectorAll('[data-mock]').forEach(b=>b.onclick=()=>openMock(b.dataset.mock));
+ document.querySelectorAll('[data-noop]').forEach(b=>b.onclick=()=>toast('Prototype: not available'));
+ document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copy(t?tkMd(t):epMd()));
+ document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-act]').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.act)});
+ document.querySelectorAll('.stbtn').forEach(b=>b.onclick=()=>toast('Prototype: status is set in Jira'));
+};
+route();
+})();
+</script>
+</body>
+</html>

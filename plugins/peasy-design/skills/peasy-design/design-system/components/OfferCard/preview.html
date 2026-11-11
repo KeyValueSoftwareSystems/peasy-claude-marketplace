@@ -1,0 +1,9 @@
+<!-- @dsCard group="Cards" height=500 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>OfferCard</title>
+<style>body{margin:0;padding:20px;background:var(--page-bg);font-family:var(--font-sans);color:var(--dark-500)}</style></head>
+<body><div id="root"></div>
+<script>
+var P=window.Peasy,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,h('div',{style:{display:'flex',gap:24,paddingTop:16}},h(P.OfferCard,{badge:'Snelste internet',provider:'[Provider]',price:'€ 42',name:'[Pack naam]',features:['Internet, televisie & mobiel','[snelheid] Mbps, onbeperkt downloaden','[aantal] tv-zenders','Modem inbegrepen']}))));
+</script></body></html>

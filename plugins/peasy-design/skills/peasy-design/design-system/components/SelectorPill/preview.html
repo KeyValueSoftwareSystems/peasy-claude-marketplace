@@ -1,0 +1,9 @@
+<!-- @dsCard group="Labels" height=120 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SelectorPill</title>
+<style>body{margin:0;padding:20px;background:var(--page-bg);font-family:var(--font-sans);color:var(--dark-500)}</style></head>
+<body><div id="root"></div>
+<script>
+var P=window.Peasy,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,h('div',{style:{display:'flex',gap:8,padding:24,background:'var(--tertiary-500)',borderRadius:24}},h(P.SelectorPill,{active:true},'Internetpacks'),h(P.SelectorPill,null,'Energie'),h(P.SelectorPill,null,'Autoverzekering'),h(P.SelectorPill,{size:'S'},'Klein'))));
+</script></body></html>

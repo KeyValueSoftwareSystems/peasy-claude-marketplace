@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PEASY-XXX · Energy partner</title><style>
+  :root{--ink:#17192B;--ink2:#464755;--ink3:#747580;--muted:#A2A3AA;--line:#DDDDDD;--soft:#E4E4E4;
+    --bg:#F5F5F5;--card:#FFFFFF;--purple:#394295;--blue:#66C6E2;--blue1:#E0F4F9;--pink1:#FCEDF4;--cream:#F9F4EA;
+    --green:#009B67;--warn:#F5C011;--warn1:#FEF6DB;--err:#F24236}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Grold Rounded Slim","Nunito","Varela Round",system-ui,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 16px 64px}
+  .crumbs{font-size:13px;color:var(--ink3);margin-bottom:8px}
+  .crumbs b{color:var(--purple)}
+  h1{font-size:26px;line-height:1.25;font-weight:600;margin:4px 0 16px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:16px}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2);margin:0 0 10px}
+  h3{font-size:16px;margin:0}
+  p{margin:0 0 8px}
+  ul{margin:0;padding-left:20px}
+  li{margin:2px 0}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+  th{color:var(--ink2);font-weight:600;background:#FAFAFA}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:600px){.two{grid-template-columns:1fr}}
+  .in h3{color:var(--green)} .out h3{color:var(--ink3)}
+  .story{border:1px solid var(--soft);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+  .story-head{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .sid{font-weight:700;color:var(--purple)}
+  .pts{background:var(--blue1);border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;white-space:nowrap}
+  .ac{margin-top:6px;font-size:14px}
+  .ac div{padding:4px 0 4px 10px;border-left:3px solid var(--blue);margin:6px 0}
+  .ac b{color:var(--ink2)}
+  .meta dt{font-size:12px;color:var(--ink3);margin-top:12px}
+  .meta dd{margin:2px 0 0;font-weight:500}
+  .pill{display:inline-block;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600;margin:2px 4px 2px 0}
+  .status{background:var(--blue1);color:#1E6A80}
+  .prio{background:var(--warn1);color:#7A5C00}
+  .lbl{background:#EEF0F7;color:var(--purple)}
+  .assume{background:var(--cream);border-radius:12px;padding:12px 14px}
+  .assume li::marker{color:var(--warn)}
+  .oq li{margin:6px 0}
+  .owner{font-size:12px;color:var(--ink3)}
+  .todo{color:var(--muted);font-style:italic}
+  .attach a{color:var(--purple);font-weight:600}
+  .frame{width:100%;height:560px;border:1px solid var(--line);border-radius:12px;margin-top:12px;background:#fff}
+  .note{font-size:12px;color:var(--ink3)}
+</style></head><body>
+<div class="wrap">
+
+  <div class="crumbs">Peasy / Epics / <b>PEASY-XXX</b></div>
+  <h1>Onboard a new energy supplier: compare and switch via API</h1>
+
+  <div class="grid">
+    <main>
+
+      <section class="card">
+        <h2>Summary</h2>
+        <p>Peasy compares energy suppliers, but every new partner is wired in by hand. This epic defines a reusable way to add a new supplier ("Leverancier X"): pull its tariffs every night from its API, show them in the results for Flanders, Wallonia and Brussels ranked neutrally by price, and submit the customer's switch straight to the supplier's order API. It becomes the template for each future energy supplier.</p>
+      </section>
+
+      <section class="card">
+        <h2>Context</h2>
+        <ul>
+          <li>Today's energy flow asks for postcode, solar panels, single/dual meter, electricity and gas usage, current supplier and green preference. Peasy then arranges the switch.</li>
+          <li>A switch keeps the 35-day legal notice and the meter stays the same. Peasy re-checks for better deals every year.</li>
+          <li>Prices and grid operators differ by region. Regulators: VREG (Flanders), CWaPE (Wallonia), BRUGEL (Brussels), CREG (federal). This is general knowledge, not from peasy.be: verify with Legal.</li>
+          <li>Peasy is paid a referral fee by partners and the customer signs with the supplier, so ranking must stay neutral and be explained on the results page.</li>
+          <li>The FR site has a thinner energy section than the NL site, so FR copy is parked as <span class="todo">[FR: todo]</span>.</li>
+          <li>Energy and telecom also live on sister brand Aanbieders.be (e-Contract BV). Not in v1.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Scope</h2>
+        <div class="two">
+          <div class="in"><h3>In scope</h3><ul>
+            <li>Nightly tariff sync from the supplier's API</li>
+            <li>Mapping and validation into Peasy's energy comparison model</li>
+            <li>Supplier shown in results for Flanders, Wallonia and Brussels on peasy.be (web)</li>
+            <li>Neutral ranking by price for the customer's usage</li>
+            <li>Switch submitted through the supplier's order API</li>
+            <li>Hide the supplier and alert ops when data is stale or the feed fails</li>
+            <li>Back-office: activate or deactivate the supplier, logo, ops contact</li>
+          </ul></div>
+          <div class="out"><h3>Out of scope</h3><ul>
+            <li>Aanbieders.be, Hypotheek.winkel, Verzekeringen.be</li>
+            <li>Commission or commercial weighting in ranking, and any "new" label or priority placement</li>
+            <li>Real-time price calls per comparison</li>
+            <li>Telecom suppliers</li>
+            <li>Mobile app</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Decisions made</h2>
+        <table>
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Which supplier</td><td>Generic template ("Leverancier X"); the real name is added per instance</td></tr>
+          <tr><td>Vertical</td><td>Energy</td></tr>
+          <tr><td>Tariff data source</td><td>Supplier API</td></tr>
+          <tr><td>Refresh frequency</td><td>Daily (nightly sync)</td></tr>
+          <tr><td>Switch hand-over</td><td>Order submitted via the supplier's API</td></tr>
+          <tr><td>Regions</td><td>Flanders, Wallonia and Brussels</td></tr>
+          <tr><td>Brands</td><td>Peasy only for v1</td></tr>
+          <tr><td>Ranking</td><td>Neutral, by price</td></tr>
+          <tr><td>Stale or failed feed</td><td>Hide the supplier from results and alert ops</td></tr>
+          <tr><td>Mockup</td><td>Key screens</td></tr>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>User stories</h2>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S1</span> Sync supplier tariffs every night</h3><span class="pts">5 pts</span></div>
+          <p>As the energy engine, I want to pull the supplier's tariffs every night from its API, so that results show current prices.</p>
+          <div class="ac">
+            <div><b>Given</b> the supplier is active <b>When</b> the nightly job runs <b>Then</b> all its electricity and gas products for the regions it serves are fetched and stored with a "fetched at" timestamp.</div>
+            <div><b>Given</b> a product disappears from the API response <b>When</b> the sync completes <b>Then</b> that product is marked inactive and no longer shown.</div>
+            <div><b>Given</b> the API times out or returns an error <b>When</b> the job retries [N] times and still fails <b>Then</b> the run is logged as failed and the last good data is kept (but not shown, see S4).</div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S2</span> Map and validate tariffs</h3><span class="pts">5 pts</span></div>
+          <p>As the energy engine, I want supplier fields mapped and validated against Peasy's comparison model, so that yearly cost is calculated the same way for every supplier and region.</p>
+          <div class="ac">
+            <div><b>Given</b> a product from the API <b>When</b> it is mapped <b>Then</b> it has product name, fixed or variable, € per kWh (per meter type), fixed fee per year, green %, contract length, region and valid from/to.</div>
+            <div><b>Given</b> a required field is missing or out of range (negative price, unknown meter type, unknown region) <b>When</b> validation runs <b>Then</b> the product is rejected, logged with the reason and not shown.</div>
+            <div><b>Given</b> the supplier sends the same product with different prices per region <b>When</b> mapping runs <b>Then</b> one regional tariff is stored per region and none leaks into another region.</div>
+            <div><b>Given</b> the supplier sends extra fields Peasy doesn't model <b>When</b> mapping runs <b>Then</b> they are stored raw but not used in ranking.</div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S3</span> Show the supplier in results</h3><span class="pts">5 pts</span></div>
+          <p>As a household comparing energy, I want to see the new supplier's offers next to the others, so that I can pick the cheapest deal for my usage.</p>
+          <div class="ac">
+            <div><b>Given</b> I complete the energy flow with a postcode in Flanders, Wallonia or Brussels <b>When</b> results load <b>Then</b> the supplier's offers for my region appear, sorted with the rest by price for my usage.</div>
+            <div><b>Given</b> an offer card <b>When</b> it renders <b>Then</b> it shows supplier name or logo, product name, yearly cost "€ XX per jaar", € per kWh, fixed fee, green %, tariff type and contract length (OfferCard).</div>
+            <div><b>Given</b> the supplier's offer is not the cheapest <b>When</b> results load <b>Then</b> it sits in its price position with no label, badge or priority.</div>
+            <div><b>Given</b> the supplier doesn't serve my region <b>When</b> results load <b>Then</b> it is not shown and the rest of the list is unchanged.</div>
+            <div><b>Given</b> offers are still loading <b>When</b> the page renders <b>Then</b> I see placeholder cards and "Aanbiedingen worden geladen…" (proposed).</div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S4</span> Hide the supplier on stale data</h3><span class="pts">3 pts</span></div>
+          <p>As Peasy ops, I want a supplier with stale or failed data hidden automatically and flagged to me, so that customers never switch on a wrong price.</p>
+          <div class="ac">
+            <div><b>Given</b> the last successful sync is older than [N] hours <b>When</b> a comparison runs <b>Then</b> the supplier's offers are excluded and the list shows the other offers without an error message.</div>
+            <div><b>Given</b> the supplier is hidden <b>When</b> that happens <b>Then</b> ops get an alert (channel TBD) with supplier, last success time and error.</div>
+            <div><b>Given</b> the next sync succeeds and passes validation <b>When</b> the data is stored <b>Then</b> the supplier reappears without manual action.</div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S5</span> Submit the switch via the order API</h3><span class="pts">8 pts</span></div>
+          <p>As a customer, I want to confirm my switch on Peasy and have it sent straight to the supplier, so that I don't have to sign up again elsewhere.</p>
+          <div class="ac">
+            <div><b>Given</b> I chose an offer <b>When</b> I open "Controleer je overstap" <b>Then</b> I see a recap, my delivery address, email, EAN code(s), the earliest start (35-day notice), region info and an unchecked consent checkbox.</div>
+            <div><b>Given</b> an EAN code isn't 18 digits or the consent isn't checked <b>When</b> I press "Bevestig overstap" <b>Then</b> I see an error summary, inline errors per field, focus moves to the first error and nothing is sent.</div>
+            <div><b>Given</b> valid input <b>When</b> I confirm <b>Then</b> Peasy re-checks that the price is still current, sends the order to the supplier's API and stores the supplier's order ID with a Peasy reference.</div>
+            <div><b>Given</b> the price changed since the results page <b>When</b> I confirm <b>Then</b> I see the new price and must confirm again.</div>
+            <div><b>Given</b> a network retry or double click <b>When</b> the order is sent twice <b>Then</b> the supplier receives one order (idempotent on the Peasy reference).</div>
+            <div><b>Given</b> the optional marketing checkbox <b>When</b> the page loads <b>Then</b> it is unchecked and doesn't block the switch.</div>
+          </div>
+          <p class="note" style="margin-top:8px">8 pts is the ceiling. Split into "confirm form" and "order API client" if grooming estimates higher.</p>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S6</span> Confirmation and fallback</h3><span class="pts">3 pts</span></div>
+          <p>As a customer, I want a clear confirmation of what happens next, and a way forward when the order can't be sent, so that I trust the switch is handled.</p>
+          <div class="ac">
+            <div><b>Given</b> the supplier's API accepts the order <b>When</b> the confirmation page loads <b>Then</b> I see "Je overstap is aangevraagd", my Peasy reference, the next steps and I get a confirmation email.</div>
+            <div><b>Given</b> the order API is unreachable or rejects the order <b>When</b> I confirm <b>Then</b> I see "Je aanvraag is niet doorgegeven", my current contract stays unchanged, nothing is counted as placed and I see an error code for customer service.</div>
+            <div><b>Given</b> the failure screen <b>When</b> I press "Probeer opnieuw" <b>Then</b> the order is retried with the same Peasy reference.</div>
+            <div><b>Given</b> the failure screen <b>When</b> I choose "Laat ons je terugbellen" <b>Then</b> ops get a callback task with my details and reference. <span class="note">(Callback confirmation screen: proposed, not in the mockup.)</span></div>
+            <div><b>Given</b> the supplier rejects the order later (asynchronously) <b>When</b> Peasy receives the status <b>Then</b> ops are alerted and the customer is contacted. <span class="note">[Status webhook: TBD]</span></div>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story-head"><h3><span class="sid">S7</span> Manage the supplier in the back-office</h3><span class="pts">3 pts</span></div>
+          <p>As Peasy ops, I want to activate, deactivate and configure the supplier in the back-office, so that we control when it goes live.</p>
+          <div class="ac">
+            <div><b>Given</b> I open the supplier list in the back-office <b>When</b> I add the supplier <b>Then</b> I can set name, logo, API credentials reference, regions served, ops contact and status.</div>
+            <div><b>Given</b> the supplier is "Niet actief" <b>When</b> a comparison runs <b>Then</b> it is never shown, even with fresh data.</div>
+            <div><b>Given</b> no logo is uploaded <b>When</b> I try to activate <b>Then</b> activation is blocked with "Voeg eerst een logo toe."</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>UX copy</h2>
+        <table>
+          <tr><th>Key</th><th>nl-BE</th><th>fr-BE</th></tr>
+          <tr><td>results.title</td><td>Jouw energieaanbiedingen</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>results.sort</td><td>Gesorteerd op laagste prijs voor jouw verbruik.</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>results.loading</td><td>Aanbiedingen worden geladen…</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>results.ranking</td><td>We rangschikken op prijs voor jouw verbruik, niet op wat een leverancier ons betaalt. [Legal text: todo]</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>offer.cta</td><td>Kies dit aanbod</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>confirm.title</td><td>Controleer je overstap</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>confirm.summary</td><td>Nog [N] dingen om na te kijken</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>confirm.ean.error</td><td>Dit EAN-nummer heeft [N] cijfers, maar er zijn er 18 nodig. Controleer het nummer op je laatste factuur.</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>confirm.startdate.help</td><td>Vroegste start: na de opzegtermijn van 35 dagen. Je meter blijft dezelfde.</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>confirm.consent</td><td>Ik ga akkoord met de overstap naar [Leverancier] en geef Peasy de toestemming om mijn aanvraag door te geven. [Legal text: todo]</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>confirm.consent.error</td><td>Vink dit aan om verder te gaan.</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>confirm.cta</td><td>Bevestig overstap</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>done.title</td><td>Je overstap is aangevraagd</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>error.title</td><td>Oei, het doorgeven is niet gelukt</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>error.banner</td><td>Je aanvraag is niet doorgegeven</td><td class="todo">[FR: todo]</td></tr>
+          <tr><td>error.retry / error.callback</td><td>Probeer opnieuw / Laat ons je terugbellen</td><td class="todo">[FR: todo]</td></tr>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Non-functional</h2>
+        <ul>
+          <li><b>Privacy:</b> name, address, EAN and contact details go to the supplier to carry out the switch the customer asks for. Controller Verzekeringen NV; the supplier is a separate controller. Retention per existing policy. Marketing opt-in is never pre-checked. Update the privacy notice to list the supplier as a recipient. [Legal text: todo]</li>
+          <li><b>Regulation:</b> check switching and comparison-transparency rules for each region (VREG, CWaPE, BRUGEL) and what "jaarkost" must include. Verify with Legal.</li>
+          <li><b>Security:</b> supplier API credentials in the secrets store, never in the admin UI; TLS; order calls are idempotent and retry-safe.</li>
+          <li><b>Accessibility:</b> WCAG 2.2 AA; error summary focused on submit; inline errors linked to their fields; visible focus ring; loading state announced as status.</li>
+          <li><b>Performance:</b> results never call the supplier's API live; order submit answers or falls back within [X] s.</li>
+          <li><b>Analytics:</b> <code>supplier_sync_success</code>, <code>supplier_sync_failed</code>, <code>supplier_hidden_stale</code>, <code>offer_selected</code>, <code>switch_confirmed</code>, <code>switch_order_accepted</code>, <code>switch_order_failed</code>, <code>callback_requested</code>.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Dependencies</h2>
+        <ul>
+          <li>Signed partner agreement with the supplier, including API access (tariff and order) and a sandbox</li>
+          <li>Supplier API docs: tariff schema, order schema, status callbacks, rate limits, regions served</li>
+          <li>Logo usage rights from the supplier</li>
+          <li>Legal review: consent wording, privacy notice, regional regulation, ranking explanation (NL + FR)</li>
+          <li>Ops: alert channel and process for failed or rejected orders and callbacks</li>
+          <li>A back-office place to manage suppliers (existing or new, see open questions)</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Assumptions</h2>
+        <div class="assume"><ul>
+          <li><b>Assumption:</b> Peasy's energy engine already calculates yearly cost from € per kWh, fixed fee and usage; this epic only feeds it new data.</li>
+          <li><b>Assumption:</b> The supplier's API exposes tariffs per meter type and per region, and returns an order ID synchronously.</li>
+          <li><b>Assumption:</b> Grid costs and levies are added by Peasy's engine, not by the supplier.</li>
+          <li><b>Assumption:</b> The existing confirm step can be reused; only the hand-over changes from manual to API.</li>
+          <li><b>Assumption:</b> When the order fails, the customer's current contract is unchanged and nothing is counted as placed.</li>
+        </ul></div>
+      </section>
+
+      <section class="card">
+        <h2>Open questions</h2>
+        <ol class="oq">
+          <li>What exactly is in "jaarkost" (energy, grid costs, levies, btw), and does any regulator require a specific breakdown per region? <span class="owner">Owner: Legal + Product</span></li>
+          <li>Does the order API return a final status synchronously, or do we need a webhook or polling for later rejections? <span class="owner">Owner: Tech</span></li>
+          <li>What is the stale-data threshold, and which alert channel does ops use? <span class="owner">Owner: Ops + Tech</span></li>
+          <li>Consent wording: does the customer accept the supplier's terms on Peasy, or does the supplier send its own contract to sign? <span class="owner">Owner: Legal</span></li>
+          <li>Which basis does the "Laagste prijs" badge use, and may a "new" tag ever be shown under neutral ranking? <span class="owner">Owner: Product + Legal</span></li>
+          <li>Does a back-office supplier list already exist, or is it new work? <span class="owner">Owner: Tech</span></li>
+          <li>What is the monthly switch target for success? <span class="owner">Owner: Product</span></li>
+          <li>When do Aanbieders.be and the other sister brands follow, and does the Meilleurtaux deal change that? Verify with Peasy. <span class="owner">Owner: Product</span></li>
+        </ol>
+      </section>
+
+      <section class="card attach">
+        <h2>Attachments</h2>
+        <p>Mockup: <a href="energy-partner-mockup.html" target="_blank" rel="noopener">energy-partner-mockup.html</a> <span class="note">(generated by peasy-design, Voorbeelddata; 5 frames: results, loading, confirm with errors, success, order-API failure)</span></p>
+        <iframe class="frame" title="Mockup preview" src="energy-partner-mockup.html"></iframe>
+      </section>
+
+    </main>
+
+    <aside class="card meta">
+      <h2>Details</h2>
+      <dl>
+        <dt>Status</dt><dd><span class="pill status">To groom</span></dd>
+        <dt>Type</dt><dd>Epic</dd>
+        <dt>Priority</dt><dd><span class="pill prio">Medium</span></dd>
+        <dt>Labels</dt><dd><span class="pill lbl">provider-onboarding</span><span class="pill lbl">energy</span><span class="pill lbl">nl-fr</span><span class="pill lbl">gdpr</span></dd>
+        <dt>Components</dt><dd>Web, Back-office, Emails</dd>
+        <dt>Brands</dt><dd>Peasy</dd>
+        <dt>Reporter</dt><dd>Adarsh</dd>
+        <dt>Estimate</dt><dd>32 pts <span class="note">(rough)</span></dd>
+        <dt>Created by</dt><dd>peasy-brainstormer</dd>
+      </dl>
+    </aside>
+  </div>
+</div>
+</body></html>

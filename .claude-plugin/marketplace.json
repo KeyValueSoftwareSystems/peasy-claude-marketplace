@@ -1,0 +1,25 @@
+{
+  "name": "peasy-claude-marketplace",
+  "owner": {
+    "name": "KeyValue Software Systems",
+    "url": "https://github.com/KeyValueSoftwareSystems"
+  },
+  "metadata": {
+    "description": "Peasy skills for Claude: brainstorm a feature into a Jira-style PRD and design it on-brand.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "peasy-brainstormer",
+      "source": "./plugins/peasy-brainstormer",
+      "description": "Rough Peasy feature idea -> Belgian-context clarifying questions -> optional mockup -> Jira-style PRD (epic + stories, Given/When/Then AC) as one HTML page.",
+      "version": "0.5.0"
+    },
+    {
+      "name": "peasy-design",
+      "source": "./plugins/peasy-design",
+      "description": "On-brand Peasy screens, flows, copy, decks and design audits from the Peasy Design System (offline copy bundled).",
+      "version": "1.1.0"
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Peasy Brainstormer Call Flow</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: verdict, step table, then sequence diagram in its own scroller. */
+:root{--bg:#FDFDFD;--surface:#FFFFFF;--sunk:#F4F5FA;--fg:#17192B;--fg2:#5A5B68;--line:#E1E2EA;--accent:#394295;
+--ok:#00704A;--ok-soft:#E6F5EF;--warn:#7A5C00;--warn-soft:#FEF6DB;--err:#C42B21;--err-soft:#FEECEB}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12131F;--surface:#1A1C2C;--sunk:#202235;--fg:#EDEDF4;--fg2:#B5B6C6;--line:#2E3047;--accent:#A9AEE8;
+--ok:#5FD3A6;--ok-soft:#173A2E;--warn:#F2CF5C;--warn-soft:#3A3014;--err:#FF8A80;--err-soft:#401E1C;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12131F;--surface:#1A1C2C;--sunk:#202235;--fg:#EDEDF4;--fg2:#B5B6C6;--line:#2E3047;--accent:#A9AEE8;
+--ok:#5FD3A6;--ok-soft:#173A2E;--warn:#F2CF5C;--warn-soft:#3A3014;--err:#FF8A80;--err-soft:#401E1C;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 "Nunito",system-ui,sans-serif;margin:0}
+.wrap{max-width:1200px;margin:0 auto;padding-block:36px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:800}
+h1{margin:4px 0 8px;font-size:clamp(26px,4vw,36px);font-weight:800;text-wrap:balance}
+h2{margin:0 0 10px;font-size:22px;font-weight:800}
+p{margin:0;color:var(--fg2);max-width:72ch}
+.verdict{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media(max-width:720px){.verdict{grid-template-columns:1fr}}
+.v{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.v b{display:block;font-size:20px}
+.v.ok b{color:var(--ok)} .v.warn b{color:var(--warn)} .v.err b{color:var(--err)}
+.v span{color:var(--fg2);font-size:14px}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:820px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunk);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg2)}
+tr:last-child td{border-bottom:0}
+td{color:var(--fg2)} td b{color:var(--fg)}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;color:var(--fg)}
+.pill{font-size:12px;font-weight:800;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.err{background:var(--err-soft);color:var(--err)}
+.chart{overflow-x:auto;background:#FFFFFF;border:1px solid var(--line);border-radius:16px;padding:16px}
+.chart pre{margin:0;min-width:1100px}
+</style>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">peasy-brainstormer · call flow</div>
+    <h1>Does it all run inside Claude?</h1>
+    <p>Yes, from idea to shared ticket and mockup. The one step outside is creating the issues in Jira, because no Jira connector is set up for your org. The clickable questions depend on the app: Cowork has them, other surfaces fall back to a text list.</p>
+  </header>
+  <div class="verdict">
+    <div class="v ok"><b>9 of 11 steps</b><span>run fully inside the Claude workspace</span></div>
+    <div class="v warn"><b>1 step partly</b><span>clickable questions depend on the app</span></div>
+    <div class="v err"><b>1 step outside</b><span>Jira, until a connector is added</span></div>
+  </div>
+  <section>
+    <h2>Step by step</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Step</th><th>Where</th><th>Call</th><th>Status</th><th>Note</th></tr></thead>
+      <tbody><tr><td><b>Install plugin</b></td><td>claude.ai → Customize → Add plugin</td><td><code>Settings UI</code></td><td><span class="pill ok">In Claude</span></td><td>Needs read access to the GitHub repo; an org owner can add it for everyone</td></tr><tr><td><b>Start the skill</b></td><td>Claude</td><td><code>Skill("peasy-brainstormer")</code></td><td><span class="pill ok">In Claude</span></td><td>Explicit skill name avoids peasy-design picking it up</td></tr><tr><td><b>Load questions</b></td><td>Claude ↔ skill files</td><td><code>Read question-bank.md</code></td><td><span class="pill ok">In Claude</span></td><td>Bundled with the plugin</td></tr><tr><td><b>Ask questions</b></td><td>Claude ↔ user</td><td><code>AskUserQuestion</code></td><td><span class="pill warn">Partly</span></td><td>Buttons in Cowork; plain-text list where the tool isn't offered</td></tr><tr><td><b>Confirm brief</b></td><td>Claude ↔ user</td><td><code>Chat message</code></td><td><span class="pill ok">In Claude</span></td><td></td></tr><tr><td><b>Read design system</b></td><td>Claude → Design System artifact</td><td><code>Artifact read</code></td><td><span class="pill ok">In Claude</span></td><td>User must have access to the artifact</td></tr><tr><td><b>Build mockup</b></td><td>Claude → Artifacts</td><td><code>Artifact publish (Design type)</code></td><td><span class="pill ok">In Claude</span></td><td>Editable and shareable in place</td></tr><tr><td><b>Write ticket</b></td><td>Claude</td><td><code>Read template · Write HTML</code></td><td><span class="pill ok">In Claude</span></td><td></td></tr><tr><td><b>Publish ticket</b></td><td>Claude → Artifacts</td><td><code>Artifact publish</code></td><td><span class="pill ok">In Claude</span></td><td>Private until shared</td></tr><tr><td><b>Share</b></td><td>User → Artifacts</td><td><code>Share menu</code></td><td><span class="pill ok">In Claude</span></td><td></td></tr><tr><td><b>Create Jira issues</b></td><td>User → Jira</td><td><code>Manual copy</code></td><td><span class="pill err">Outside Claude</span></td><td>No Jira connector found for your org; with one, Claude creates the epic and stories</td></tr></tbody>
+    </table></div>
+  </section>
+  <section>
+    <h2>Calls in order</h2>
+    <p style="margin-bottom:12px">Solid arrows are calls, dashed arrows are responses. Shaded blocks: questions, mockup, ticket.</p>
+    <div class="chart"><pre class="mermaid">
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Nunito, system-ui, sans-serif","fontSize":"14px","actorBkg":"#E7E8F4","actorBorder":"#394295","actorTextColor":"#17192B","signalColor":"#464755","signalTextColor":"#17192B","noteBkgColor":"#FEF6DB","noteBorderColor":"#C9A10E","noteTextColor":"#17192B","labelBoxBkgColor":"#F4F5FA","labelBoxBorderColor":"#394295","labelTextColor":"#17192B","loopTextColor":"#17192B","sequenceNumberColor":"#FFFFFF"}}}%%
+sequenceDiagram
+  autonumber
+  actor U as Peasy user
+  participant C as Claude (Cowork / claude.ai)
+  participant B as peasy-brainstormer files
+  participant D as peasy-design skill
+  participant DS as Design System artifact
+  participant A as Artifacts on claude.ai
+  participant J as Jira
+
+  Note over U,A: Everything below runs inside the Claude workspace
+  U-&gt;&gt;C: "Use peasy-brainstormer: add SSO login"
+  C-&gt;&gt;B: Skill("peasy-brainstormer")
+  B--&gt;&gt;C: SKILL.md (workflow)
+  C-&gt;&gt;B: Read references/question-bank.md
+  B--&gt;&gt;C: Archetype A questions
+
+  rect rgba(57,66,149,0.08)
+  Note over C,U: Questions (max 2 rounds)
+  C-&gt;&gt;U: AskUserQuestion · round 1 (≤4, scope)
+  U--&gt;&gt;C: Answers
+  opt Important items still open
+    C-&gt;&gt;U: AskUserQuestion · round 2 (≤4, details)
+    U--&gt;&gt;C: Answers
+  end
+  end
+
+  C-&gt;&gt;U: Brief playback (≤10 lines)
+  U--&gt;&gt;C: Confirm or correct
+  C-&gt;&gt;U: AskUserQuestion · "Generate a mockup?"
+  U--&gt;&gt;C: Yes, key screens
+
+  rect rgba(102,198,226,0.12)
+  Note over C,A: Mockup (optional)
+  C-&gt;&gt;D: Skill("peasy-design") + design brief
+  D--&gt;&gt;C: peasy-design rules
+  C-&gt;&gt;DS: Artifact read (design system URL)
+  DS--&gt;&gt;C: README, tokens.json, components, assets
+  C-&gt;&gt;A: Artifact publish (type_url = Design, title)
+  A--&gt;&gt;C: Empty Design artifact + type instructions
+  C-&gt;&gt;A: Publish screen files to that URL
+  A--&gt;&gt;U: Mockup opens
+  loop Until user is happy
+    U-&gt;&gt;C: "Change X"
+    C-&gt;&gt;A: Republish same URL
+  end
+  end
+
+  rect rgba(0,155,103,0.08)
+  Note over C,A: Ticket
+  C-&gt;&gt;B: Read ticket-format.md + ticket-template.html
+  B--&gt;&gt;C: Fields, rules, HTML structure
+  C-&gt;&gt;C: Write &lt;feature&gt;-ticket.html (mockup linked)
+  C-&gt;&gt;A: Artifact publish (ticket file)
+  A--&gt;&gt;C: Ticket URL
+  C-&gt;&gt;U: Hand-over: ticket link, mockup link, top open questions
+  end
+
+  U-&gt;&gt;A: Share menu → team
+  U-)J: Copy epic + stories by hand
+  Note over J: Outside Claude today. No Jira connector found for your org.&lt;br/&gt;With one: createIssue calls from Claude instead.
+
+    </pre></div>
+  </section>
+</div>
+
+<!--claude-mermaid-runtime-begin:3477-->
+<style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
+<script src="/_runtime/mermaid-11.16.1.min.js"></script>
+<script>(function(){
+var CFG={"palettes":{"light":{"surface":"#f4efe4","text":"#42392e","line":"#8a7f6d","border":"#7a6c52","bg":"#fffdf8"},"dark":{"surface":"#262b34","text":"#f2f3f5","line":"#a8adb8","border":"#9aa4b8","bg":"#1f232b"}}};
+if(typeof mermaid==='undefined')return;
+var pres=Array.prototype.slice.call(document.querySelectorAll('pre.mermaid')).filter(function(p){if(p.hasAttribute('data-claude-mermaid-claimed'))return false;p.setAttribute('data-claude-mermaid-claimed','1');return true;});
+if(!pres.length)return;
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+var root=document.documentElement;
+var items=pres.map(function(pre){
+var mount=document.createElement('div');mount.className='mermaid-diagram';
+return {pre:pre,mount:mount,src:pre.textContent||''};
+});
+var seq=0;
+var renderGen=0;
+var lastKey='';
+function pageBg(fallback){
+var els=[document.body,document.documentElement];
+for(var i=0;i<els.length;i++){
+var c=els[i]&&getComputedStyle(els[i]).backgroundColor;
+if(c&&c!=='transparent'&&c!=='rgba(0, 0, 0, 0)')return c;
+}
+return fallback;
+}
+function render(){
+var theme=root.getAttribute('data-theme');
+var dark=theme==='dark'||(!!(mq&&mq.matches)&&theme!=='light');
+var pal=dark?CFG.palettes.dark:CFG.palettes.light;
+var bg=pageBg(pal.bg);
+var key=(dark?'d':'l')+'|'+bg;
+if(key===lastKey)return;
+lastKey=key;
+var gen=++renderGen;
+var font=getComputedStyle(document.body).fontFamily||'sans-serif';
+var nat={useMaxWidth:false};
+mermaid.initialize({
+startOnLoad:false,securityLevel:'strict',theme:'base',
+flowchart:nat,sequence:nat,er:nat,state:nat,class:nat,pie:nat,
+gantt:nat,journey:nat,timeline:nat,gitGraph:nat,mindmap:nat,xyChart:nat,
+quadrantChart:nat,sankey:nat,c4:nat,requirement:nat,block:nat,
+packet:nat,kanban:nat,architecture:nat,radar:nat,
+themeVariables:{background:bg,mainBkg:pal.surface,primaryColor:pal.surface,
+primaryTextColor:pal.text,lineColor:pal.line,primaryBorderColor:pal.border,
+nodeBorder:pal.border,clusterBorder:pal.border,edgeLabelBackground:bg,
+clusterBkg:'rgba(127,127,127,0.07)',titleColor:pal.text,
+darkMode:dark,rowOdd:bg,rowEven:'rgba(127,127,127,0.07)',
+attributeBackgroundColorOdd:bg,attributeBackgroundColorEven:'rgba(127,127,127,0.07)',
+fontSize:'16px',fontFamily:font},
+themeCSS:'.node rect, .node circle, .node polygon, .node path, .cluster rect { stroke-width: 2px; }'
+});
+items.forEach(function(it){
+var id='claude-mermaid-'+seq++;
+mermaid.render(id,it.src).then(function(r){
+if(gen!==renderGen)return;
+var prev=it.pre.previousElementSibling;
+if(prev&&prev.className==='mermaid-diagram'&&prev!==it.mount)return;
+it.mount.innerHTML=r.svg;
+if(!it.mount.parentNode)it.pre.parentNode.insertBefore(it.mount,it.pre);
+it.pre.style.display='none';
+},function(){
+var scratch=document.getElementById(id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+scratch=document.getElementById('d'+id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+if(gen!==renderGen)return;
+if(it.mount.parentNode)it.mount.parentNode.removeChild(it.mount);
+it.pre.style.display='';
+});
+});
+}
+render();
+if(mq&&mq.addEventListener)mq.addEventListener('change',render);
+if(typeof MutationObserver!=='undefined')new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['data-theme']});
+})();</script>
+<!--claude-mermaid-runtime-end-->
+
+</body></html>

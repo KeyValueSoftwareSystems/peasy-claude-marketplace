@@ -1,0 +1,244 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Peasy Brainstormer User Flow</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<style>
+/* Layout: header + legend, then the full flowchart in its own horizontal scroller. */
+:root{--bg:#FDFDFD;--fg:#17192B;--fg2:#5A5B68;--line:#E1E2EA;--surface:#FFFFFF;--accent:#394295}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12131F;--fg:#EDEDF4;--fg2:#B5B6C6;--line:#2E3047;--surface:#1A1C2C;--accent:#A9AEE8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12131F;--fg:#EDEDF4;--fg2:#B5B6C6;--line:#2E3047;--surface:#1A1C2C;--accent:#A9AEE8;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 "Nunito",system-ui,sans-serif;margin:0}
+.wrap{max-width:1200px;margin:0 auto;padding-block:36px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:800}
+h1{margin:4px 0 6px;font-size:clamp(26px,4vw,36px);font-weight:800;text-wrap:balance}
+p{margin:0;color:var(--fg2);max-width:70ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--fg2)}
+.legend span::before{content:"";display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px;background:var(--c);border:1px solid var(--b)}
+.chart{overflow-x:auto;background:#FFFFFF;border:1px solid var(--line);border-radius:16px;padding:16px}
+.chart pre{margin:0;min-width:760px;display:flex;justify-content:center}
+</style>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">peasy-brainstormer · v0.2 target</div>
+    <h1>From one-line idea to groomable ticket</h1>
+    <p>Every step a Peasy team member goes through: setup, questions, brief, optional mockup via peasy-design, Jira-style ticket and what happens after. Diamonds are decisions; red boxes are fallbacks.</p>
+  </header>
+  <div class="legend">
+    <span style="--c:#FCEDF4;--b:#D97AA6">User action</span>
+    <span style="--c:#E7E8F4;--b:#394295">peasy-brainstormer</span>
+    <span style="--c:#E0F4F9;--b:#3A9BB8">peasy-design</span>
+    <span style="--c:#E6F5EF;--b:#009B67">Output</span>
+    <span style="--c:#FEF6DB;--b:#C9A10E">Decision</span>
+    <span style="--c:#FEECEB;--b:#C42B21">Fallback</span>
+  </div>
+  <div class="chart"><pre class="mermaid">
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Nunito, system-ui, sans-serif","fontSize":"15px","lineColor":"#747580","edgeLabelBackground":"#FFFFFF","textColor":"#17192B"}}}%%
+flowchart TD
+  classDef user fill:#FCEDF4,stroke:#D97AA6,color:#17192B
+  classDef skill fill:#E7E8F4,stroke:#394295,color:#17192B
+  classDef design fill:#E0F4F9,stroke:#3A9BB8,color:#17192B
+  classDef out fill:#E6F5EF,stroke:#009B67,color:#17192B
+  classDef dec fill:#FEF6DB,stroke:#C9A10E,color:#17192B
+  classDef stop fill:#FEECEB,stroke:#C42B21,color:#17192B
+
+  subgraph S0["0 · One-time setup"]
+    A1["Install Peasy marketplace&lt;br/&gt;Customize → Add plugin → Add from repository"]:::user
+    A2["Enable peasy-brainstormer&lt;br/&gt;+ peasy-design"]:::user
+    A3{"Can open Peasy&lt;br/&gt;Design System artifact?"}:::dec
+    A4["Ask design lead for access"]:::stop
+    A1 --&gt; A2 --&gt; A3
+    A3 -- No --&gt; A4 --&gt; A3
+  end
+
+  subgraph S1["1 · Start"]
+    B1["User writes one line&lt;br/&gt;'Use peasy-brainstormer: add SSO login'"]:::user
+    B2{"Right skill picked up?"}:::dec
+    B3["Re-send with&lt;br/&gt;'Use peasy-brainstormer' first"]:::user
+    B4["Classify feature type"]:::skill
+    B5{"Type"}:::dec
+    T1["A · Identity &amp;amp; login"]:::skill
+    T2["B · Provider onboarding"]:::skill
+    T3["C · Comparison &amp;amp; results"]:::skill
+    T4["D · Switch &amp;amp; hand-over"]:::skill
+    T5["E · Generic"]:::skill
+    B6["Load matching questions&lt;br/&gt;from question bank"]:::skill
+    B1 --&gt; B2
+    B2 -- No: peasy-design answered --&gt; B3 --&gt; B2
+    B2 -- Yes --&gt; B4 --&gt; B5
+    B5 --&gt; T1 &amp; T2 &amp; T3 &amp; T4 &amp; T5 --&gt; B6
+  end
+
+  subgraph S2["2 · Questions (max 2 rounds)"]
+    C0{"Clickable question&lt;br/&gt;tool available?"}:::dec
+    C0a["Ask as buttons&lt;br/&gt;Belgian default = Recommended"]:::skill
+    C0b["Ask as numbered list&lt;br/&gt;user replies in one message"]:::skill
+    C1["Round 1 · Scope (≤4)&lt;br/&gt;who · brands · v1 in/out"]:::skill
+    C2["User answers&lt;br/&gt;or types own option"]:::user
+    C3{"Anything important&lt;br/&gt;still open?"}:::dec
+    C4{"User said&lt;br/&gt;'use defaults'?"}:::dec
+    C5["Round 2 · Details (≤4)&lt;br/&gt;data · edge cases · legal · copy"]:::skill
+    C6["User answers"]:::user
+    C7["Cross-check: NL/FR · GDPR · sister brands&lt;br/&gt;FSMA / VREG / CWaPE / BRUGEL · success metric"]:::skill
+    C8["Unanswered items → Open questions&lt;br/&gt;(never a round 3)"]:::skill
+    C0 -- Yes --&gt; C0a --&gt; C1
+    C0 -- No --&gt; C0b --&gt; C1
+    C1 --&gt; C2 --&gt; C3
+    C3 -- No --&gt; C7
+    C3 -- Yes --&gt; C4
+    C4 -- Yes --&gt; C7
+    C4 -- No --&gt; C5 --&gt; C6 --&gt; C7 --&gt; C8
+  end
+
+  subgraph S3["3 · Confirm brief"]
+    D1["Play back brief ≤10 lines&lt;br/&gt;problem · users · scope · out · decisions"]:::skill
+    D2{"User confirms?"}:::dec
+    D3["User corrects"]:::user
+    D1 --&gt; D2
+    D2 -- No --&gt; D3 --&gt; D1
+  end
+
+  subgraph S4["4 · Design"]
+    E1{"Generate a mockup?"}:::dec
+    E2["Build design brief&lt;br/&gt;screens · actions · states · nl-BE&lt;br/&gt;Voorbeelddata · € XX"]:::skill
+    E3{"peasy-design&lt;br/&gt;available?"}:::dec
+    E4["Note: ticket only&lt;br/&gt;mockup listed as open item"]:::stop
+    E5["peasy-design reads&lt;br/&gt;Design System artifact"]:::design
+    E6["Builds on-brand screens&lt;br/&gt;audit-checklist self-check"]:::design
+    E7["User reviews mockup"]:::user
+    E8{"Changes needed?"}:::dec
+    E9["User asks for changes"]:::user
+    E10["Mockup ready&lt;br/&gt;artifact link or HTML file"]:::out
+    E1 -- "Yes: key screens / one screen" --&gt; E2 --&gt; E3
+    E1 -- "No: ticket only" --&gt; F0
+    E3 -- No --&gt; E4 --&gt; F0
+    E3 -- Yes --&gt; E5 --&gt; E6 --&gt; E7 --&gt; E8
+    E8 -- Yes --&gt; E9 --&gt; E6
+    E8 -- No --&gt; E10
+  end
+
+  subgraph S5["5 · Ticket"]
+    F0["Read ticket format + template"]:::skill
+    F1["Fill epic: summary · context · scope&lt;br/&gt;decisions made · 3–7 stories&lt;br/&gt;Given/When/Then · nl-BE copy&lt;br/&gt;non-functional · dependencies&lt;br/&gt;assumptions · open questions + owners"]:::skill
+    F2{"More than 7 stories&lt;br/&gt;or story &amp;gt; 8 pts?"}:::dec
+    F3["Suggest split&lt;br/&gt;into 2 epics"]:::skill
+    F4{"Mockup type?"}:::dec
+    F5["Attach as link"]:::skill
+    F6["Attach link + inline preview"]:::skill
+    F7["Publish ticket as&lt;br/&gt;shareable page"]:::out
+    F8["Hand-over: ticket link · mockup link&lt;br/&gt;top 2–3 open questions"]:::out
+    F0 --&gt; F1 --&gt; F2
+    F2 -- Yes --&gt; F3 --&gt; F1
+    F2 -- No --&gt; F4
+    F4 -- "Artifact link / none" --&gt; F5 --&gt; F7
+    F4 -- "HTML file" --&gt; F6 --&gt; F7
+    F7 --&gt; F8
+  end
+
+  subgraph S6["6 · After"]
+    G1{"Changes to ticket?"}:::dec
+    G2["Ask in same chat&lt;br/&gt;'split S3' · 'add app' · 'add French'"]:::user
+    G3["Republish same ticket page"]:::skill
+    G4["Share links with team"]:::user
+    G5["Open questions → owners&lt;br/&gt;Legal · Tech · Ops · Design"]:::user
+    G6{"Jira connector?"}:::dec
+    G7["Copy into Jira by hand"]:::user
+    G8["Create epic + stories in Jira&lt;br/&gt;(future)"]:::out
+    G9["Grooming"]:::out
+    G1 -- Yes --&gt; G2 --&gt; G3 --&gt; G1
+    G1 -- No --&gt; G4 --&gt; G5 --&gt; G6
+    G6 -- "No (today)" --&gt; G7 --&gt; G9
+    G6 -- Yes --&gt; G8 --&gt; G9
+  end
+
+  A3 -- Yes --&gt; B1
+  B6 --&gt; C0
+  C8 --&gt; D1
+  D2 -- Yes --&gt; E1
+  E10 --&gt; F0
+  F8 --&gt; G1
+
+  classDef lane fill:#FAFAFC,stroke:#C9CBDA,color:#17192B
+  class S0,S1,S2,S3,S4,S5,S6 lane
+
+  </pre></div>
+</div>
+
+<!--claude-mermaid-runtime-begin:3477-->
+<style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
+<script src="/_runtime/mermaid-11.16.1.min.js"></script>
+<script>(function(){
+var CFG={"palettes":{"light":{"surface":"#f4efe4","text":"#42392e","line":"#8a7f6d","border":"#7a6c52","bg":"#fffdf8"},"dark":{"surface":"#262b34","text":"#f2f3f5","line":"#a8adb8","border":"#9aa4b8","bg":"#1f232b"}}};
+if(typeof mermaid==='undefined')return;
+var pres=Array.prototype.slice.call(document.querySelectorAll('pre.mermaid')).filter(function(p){if(p.hasAttribute('data-claude-mermaid-claimed'))return false;p.setAttribute('data-claude-mermaid-claimed','1');return true;});
+if(!pres.length)return;
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+var root=document.documentElement;
+var items=pres.map(function(pre){
+var mount=document.createElement('div');mount.className='mermaid-diagram';
+return {pre:pre,mount:mount,src:pre.textContent||''};
+});
+var seq=0;
+var renderGen=0;
+var lastKey='';
+function pageBg(fallback){
+var els=[document.body,document.documentElement];
+for(var i=0;i<els.length;i++){
+var c=els[i]&&getComputedStyle(els[i]).backgroundColor;
+if(c&&c!=='transparent'&&c!=='rgba(0, 0, 0, 0)')return c;
+}
+return fallback;
+}
+function render(){
+var theme=root.getAttribute('data-theme');
+var dark=theme==='dark'||(!!(mq&&mq.matches)&&theme!=='light');
+var pal=dark?CFG.palettes.dark:CFG.palettes.light;
+var bg=pageBg(pal.bg);
+var key=(dark?'d':'l')+'|'+bg;
+if(key===lastKey)return;
+lastKey=key;
+var gen=++renderGen;
+var font=getComputedStyle(document.body).fontFamily||'sans-serif';
+var nat={useMaxWidth:false};
+mermaid.initialize({
+startOnLoad:false,securityLevel:'strict',theme:'base',
+flowchart:nat,sequence:nat,er:nat,state:nat,class:nat,pie:nat,
+gantt:nat,journey:nat,timeline:nat,gitGraph:nat,mindmap:nat,xyChart:nat,
+quadrantChart:nat,sankey:nat,c4:nat,requirement:nat,block:nat,
+packet:nat,kanban:nat,architecture:nat,radar:nat,
+themeVariables:{background:bg,mainBkg:pal.surface,primaryColor:pal.surface,
+primaryTextColor:pal.text,lineColor:pal.line,primaryBorderColor:pal.border,
+nodeBorder:pal.border,clusterBorder:pal.border,edgeLabelBackground:bg,
+clusterBkg:'rgba(127,127,127,0.07)',titleColor:pal.text,
+darkMode:dark,rowOdd:bg,rowEven:'rgba(127,127,127,0.07)',
+attributeBackgroundColorOdd:bg,attributeBackgroundColorEven:'rgba(127,127,127,0.07)',
+fontSize:'16px',fontFamily:font},
+themeCSS:'.node rect, .node circle, .node polygon, .node path, .cluster rect { stroke-width: 2px; }'
+});
+items.forEach(function(it){
+var id='claude-mermaid-'+seq++;
+mermaid.render(id,it.src).then(function(r){
+if(gen!==renderGen)return;
+var prev=it.pre.previousElementSibling;
+if(prev&&prev.className==='mermaid-diagram'&&prev!==it.mount)return;
+it.mount.innerHTML=r.svg;
+if(!it.mount.parentNode)it.pre.parentNode.insertBefore(it.mount,it.pre);
+it.pre.style.display='none';
+},function(){
+var scratch=document.getElementById(id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+scratch=document.getElementById('d'+id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+if(gen!==renderGen)return;
+if(it.mount.parentNode)it.mount.parentNode.removeChild(it.mount);
+it.pre.style.display='';
+});
+});
+}
+render();
+if(mq&&mq.addEventListener)mq.addEventListener('change',render);
+if(typeof MutationObserver!=='undefined')new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['data-theme']});
+})();</script>
+<!--claude-mermaid-runtime-end-->
+
+</body></html>

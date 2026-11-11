@@ -1,0 +1,9 @@
+<!-- @dsCard group="Forms" height=330 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>TextField</title>
+<style>body{margin:0;padding:20px;background:var(--page-bg);font-family:var(--font-sans);color:var(--dark-500)}</style></head>
+<body><div id="root"></div>
+<script>
+var P=window.Peasy,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,h('div',{style:{display:'grid',gridTemplateColumns:'repeat(2,minmax(0,1fr))',gap:24}},h(P.TextField,{label:'Voornaam',placeholder:'bv. Jan',required:true}),h(P.TextField,{label:'Telefoon',placeholder:'bv. 0470 12 34 56',optional:true}),h(P.TextField,{label:'E-mailadres',value:'jan.peeters@mail',error:'Dit e-mailadres lijkt niet te kloppen. Controleer het even?'}),h(P.TextField,{label:'Postcode',placeholder:'bv. 2000',focused:true}),h(P.TextField,{label:'Klantnummer',placeholder:'Niet nodig',disabled:true}),h(P.TextField,{label:'Gemeente',placeholder:'bv. Antwerpen',orientation:'horizontal'}))));
+</script></body></html>
